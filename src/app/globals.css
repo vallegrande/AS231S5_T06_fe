@@ -48,7 +48,7 @@ body {
     --text-on-destructive-button: var(--destructive-foreground);
     --button-primary-bg: var(--primary);
     --button-destructive-bg: var(--destructive);
-    --pixel-art-character-bg: url('https://placehold.co/64x64.png');
+    /* --pixel-art-character-bg: url('https://placehold.co/64x64.png'); Eliminado para usar CSS puro */
   }
 
   .dark {
@@ -83,9 +83,15 @@ body {
   }
   body {
     @apply bg-background text-foreground;
-    background-image: var(--pixel-art-character-bg);
-    background-repeat: repeat;
-    background-size: 64px 64px;
+    /* Fondo de pixel art con CSS */
+    background-color: hsl(var(--muted)); /* Color base */
+    background-image:
+      linear-gradient(45deg, hsl(var(--background)) 25%, transparent 25%),
+      linear-gradient(-45deg, hsl(var(--background)) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, hsl(var(--background)) 75%),
+      linear-gradient(-45deg, transparent 75%, hsl(var(--background)) 75%);
+    background-size: 32px 32px; /* Tamaño de los "píxeles" del patrón */
+    background-position: 0 0, 0 16px, 16px -16px, -16px 0px;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-crisp-edges;
@@ -189,7 +195,9 @@ body {
    @apply bg-destructive text-destructive-foreground border-2 border-[hsl(var(--destructive)/0.7)] pixel-shadow-destructive active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-75 hover:animate-pixel-jump;
 }
 .pixel-button-ghost {
-  @apply border-2 border-transparent hover:bg-accent/20 hover:border-[hsl(var(--accent-shadow-color))] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all duration-75 hover:shadow-[3px_3px_0px_hsl(var(--accent-shadow-color))] hover:animate-pixel-jump;
+  @apply border-2 border-transparent hover:bg-accent/20 active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all duration-75 hover:animate-pixel-jump;
+  /* Se aplican los estilos de borde y sombra directamente en el estado hover */
+  @apply hover:border-2 hover:border-[hsl(var(--accent-shadow-color))] hover:shadow-[3px_3px_0px_hsl(var(--accent-shadow-color))];
 }
 
 .animate-text-pop-in {
@@ -228,3 +236,5 @@ body {
   0% { opacity: 0; }
   100% { opacity: 1; }
 }
+
+    
