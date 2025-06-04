@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -8,6 +9,7 @@ import { Loader2, Send, User, Bot } from "lucide-react";
 import { chatWithGemini, type ChatWithGeminiInput } from "@/ai/flows/chatWithGemini";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { ClientTimestamp } from "@/components/common/ClientTimestamp";
 
 export interface ChatEntry {
   id: string;
@@ -24,12 +26,18 @@ interface ChatInterfaceProps {
 
 export function ChatInterface({ onNewQueryResponse, loadQuery, clearLoadedQuery }: ChatInterfaceProps) {
   const [userInput, setUserInput] = useState("");
-  const [chatLog, setChatLog] = useState<ChatEntry[]>([
-    { id: "0", type: "ai", text: "¡Hola! Soy Gemini, tu asistente virtual. ¿En qué puedo ayudarte hoy?", timestamp: new Date() }
-  ]);
+  const [chatLog, setChatLog] = useState<ChatEntry[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  // Initialize chat with AI greeting on client side to avoid hydration issues with new Date()
+  useEffect(() => {
+    setChatLog([
+      { id: "0", type: "ai", text: "¡Hola! Soy Gemini, tu asistente virtual. ¿En qué puedo ayudarte hoy?", timestamp: new Date() }
+    ]);
+  }, []);
+
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -88,9 +96,7 @@ export function ChatInterface({ onNewQueryResponse, loadQuery, clearLoadedQuery 
             {entry.type === 'ai' ? <Bot className="w-5 h-5 text-gray-600 mt-0.5" /> : <User className="w-5 h-5 text-blue-600 mt-0.5" />}
             <div className="flex flex-col">
               <p className="whitespace-pre-wrap">{entry.text}</p>
-              <span className="text-xs text-gray-500 self-end mt-1">
-                {entry.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </span>
+              <ClientTimestamp date={entry.timestamp} />
             </div>
           </div>
         ))}
