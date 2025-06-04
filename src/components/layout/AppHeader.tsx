@@ -10,7 +10,7 @@ export function AppHeader() {
         viewBox="0 0 8 8"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="mr-3 text-primary" 
+        className="mr-3 text-foreground" 
         style={{ imageRendering: 'pixelated', shapeRendering: 'crispEdges' }}
         aria-label="Pixel art logo"
       >
@@ -32,8 +32,8 @@ export function AppHeader() {
         <rect x="3" y="7" width="2" height="1" fill="currentColor"/>
       </svg>
       <h1
-        className="text-2xl font-headline tracking-wider uppercase text-primary"
-        style={{ textShadow: '2px 2px 0px hsl(var(--primary-shadow-color))' }}
+        className="text-3xl font-headline tracking-wider uppercase text-foreground"
+        style={{ textShadow: '2px 2px 0px hsl(var(--foreground) / 0.5)' }}
       >
         Consultas & Traductor
       </h1>

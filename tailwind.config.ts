@@ -11,7 +11,7 @@ export default {
     extend: {
       fontFamily: {
         body: ['"Space Grotesk"', 'sans-serif'],
-        headline: ['"Space Grotesk"', 'sans-serif'], // Usar para títulos y elementos destacados
+        headline: ['"VT323"', '"Space Grotesk"', 'sans-serif'], // Usar VT323 para títulos
         code: ['"Space Grotesk"', 'monospace'], 
       },
       colors: {
