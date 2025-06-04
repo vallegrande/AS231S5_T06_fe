@@ -2,65 +2,109 @@
 "use client";
 
 import { TranslationForm } from "./TranslationForm";
-import { TranslationHistoryPanel, type TranslationRecord } from "./TranslationHistoryPanel";
-import { useState } from "react";
-import { Languages, PanelLeft, History } from "lucide-react";
+import { TranslationHistoryPanel } from "./TranslationHistoryPanel";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { 
+  getTranslationHistory, 
+  softDeleteTranslationHistoryItem, 
+  restoreTranslationHistoryItem,
+  clearTranslationHistory
+} from '@/lib/backend-api-client';
+import type { BackendTranslationRecord } from '@/types/backend';
+import { Languages, History, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export function TraductorSection() {
-  const [translationHistory, setTranslationHistory] = useState<TranslationRecord[]>([]);
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
 
-  const handleNewTranslation = (original: string, translated: string, langFrom: string, langTo: string) => {
-    const newRecord: TranslationRecord = {
-      id: Date.now().toString(),
-      originalText: original,
-      translatedText: translated,
-      languageFrom: langFrom,
-      languageTo: langTo,
-      timestamp: new Date(),
-      isActive: true,
-    };
-    // Keep all records, including soft-deleted, up to a limit.
-    setTranslationHistory(prev => [newRecord, ...prev.slice(0, 49)]); // Keep last 50 records
+  const { data: translationHistory = [], isLoading: isLoadingHistory, error: historyError, refetch: refetchHistory } = useQuery<BackendTranslationRecord[], Error>({
+    queryKey: ['translationHistory'],
+    queryFn: getTranslationHistory,
+  });
+
+  const handleNewTranslationCompleted = () => {
+    refetchHistory();
   };
 
+  const clearHistoryMutation = useMutation({
+    mutationFn: clearTranslationHistory,
+    onSuccess: () => {
+      toast({ title: "Historial Limpiado", description: "Todo el historial de traducciones ha sido eliminado." });
+      queryClient.invalidateQueries({ queryKey: ['translationHistory'] });
+    },
+    onError: (error) => {
+      toast({ title: "Error al Limpiar Historial", description: error.message, variant: "destructive" });
+    }
+  });
+
+  const softDeleteMutation = useMutation({
+    mutationFn: softDeleteTranslationHistoryItem,
+    onSuccess: () => {
+      toast({ title: "Traducción Eliminada", description: "La traducción ha sido marcada como eliminada." });
+      queryClient.invalidateQueries({ queryKey: ['translationHistory'] });
+    },
+    onError: (error) => {
+      toast({ title: "Error al Eliminar", description: error.message, variant: "destructive" });
+    }
+  });
+
+  const restoreMutation = useMutation({
+    mutationFn: restoreTranslationHistoryItem,
+    onSuccess: () => {
+      toast({ title: "Traducción Restaurada", description: "La traducción ha sido restaurada." });
+      queryClient.invalidateQueries({ queryKey: ['translationHistory'] });
+    },
+    onError: (error) => {
+      toast({ title: "Error al Restaurar", description: error.message, variant: "destructive" });
+    }
+  });
+
   const handleClearHistory = () => {
-    // Option 1: Clear only active items and keep soft-deleted items
-    // setTranslationHistory(prev => prev.filter(record => !record.isActive));
-    // Option 2: Clear all items (current behavior based on button title)
-    setTranslationHistory(prev => prev.map(record => ({...record, isActive: false}))); // Soft delete all
+    clearHistoryMutation.mutate();
   };
 
   const handleSoftDeleteTranslationRecord = (id: string) => {
-    setTranslationHistory(prev => prev.map(record => record.id === id ? { ...record, isActive: false } : record));
+    softDeleteMutation.mutate(id);
   };
 
   const handleRestoreTranslationRecord = (id: string) => {
-    setTranslationHistory(prev => prev.map(record => record.id === id ? { ...record, isActive: true } : record));
+    restoreMutation.mutate(id);
   };
-
+  
+  if (historyError) {
+    toast({ title: "Error al Cargar Historial de Traducción", description: historyError.message, variant: "destructive"});
+  }
 
   return (
     <div className="flex flex-col md:flex-row gap-3 md:gap-4 h-full">
-      {/* Panel de Traducción Principal */}
       <div className="flex-grow-[2] flex flex-col pixel-card overflow-hidden animate-slide-in-up">
         <header className="p-3 border-b-2 border-foreground bg-card flex items-center">
           <Languages className="w-6 h-6 mr-2 text-primary" />
           <h2 className="text-xl font-headline text-primary">Traductor con IA</h2>
         </header>
         <div className="p-3 flex-grow">
-          <TranslationForm onNewTranslation={handleNewTranslation} />
+          <TranslationForm onNewTranslationCompleted={handleNewTranslationCompleted} />
         </div>
       </div>
 
-      {/* Panel de Historial de Traducciones */}
-      <TranslationHistoryPanel 
-        history={translationHistory} 
-        onClearHistory={handleClearHistory} 
-        onSoftDeleteTranslationRecord={handleSoftDeleteTranslationRecord}
-        onRestoreTranslationRecord={handleRestoreTranslationRecord}
-        className="md:w-96 animate-slide-in-up md:animate-fade-in"
-        style={{ animationDelay: '0.1s' }}
-      />
+      {isLoadingHistory && 
+        <div className="md:w-96 flex items-center justify-center pixel-card p-4">
+          <Loader2 className="w-8 h-8 animate-spin text-primary mr-2"/> 
+          <span className="font-headline text-lg">Cargando Historial...</span>
+        </div>
+      }
+      {!isLoadingHistory &&
+        <TranslationHistoryPanel 
+          history={translationHistory} 
+          onClearHistory={handleClearHistory} 
+          onSoftDeleteTranslationRecord={handleSoftDeleteTranslationRecord}
+          onRestoreTranslationRecord={handleRestoreTranslationRecord}
+          className="md:w-96 animate-slide-in-up md:animate-fade-in"
+          style={{ animationDelay: '0.1s' }}
+          isClearingHistory={clearHistoryMutation.isPending}
+        />
+      }
     </div>
   );
 }

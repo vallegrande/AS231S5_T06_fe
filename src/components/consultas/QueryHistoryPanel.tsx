@@ -4,12 +4,14 @@
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { History, MessageSquareDashed, Trash2, RotateCcw } from "lucide-react";
-import type { ChatEntry } from "./ChatInterface";
+import type { GeminiApiTest } from "@/types/backend";
 import { cn } from "@/lib/utils";
+import { ClientTimestamp } from "../common/ClientTimestamp";
+
 
 interface QueryHistoryPanelProps {
-  history: ChatEntry[];
-  onLoadQuery: (query: ChatEntry) => void;
+  history: GeminiApiTest[];
+  onLoadQuery: (item: GeminiApiTest) => void;
   onSoftDeleteQueryItem: (id: string) => void;
   onRestoreQueryItem: (id: string) => void;
   className?: string;
@@ -25,9 +27,12 @@ export function QueryHistoryPanel({
   style 
 }: QueryHistoryPanelProps) {
   
-  // Display user queries; active ones first, then inactive ones.
-  const userQueries = history.filter(entry => entry.type === 'user')
-                            .sort((a, b) => (b.isActive ? 1 : 0) - (a.isActive ? 1 : 0) || new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  const sortedHistory = [...history].sort((a, b) => {
+    if (a.deleted === b.deleted) {
+      return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+    }
+    return a.deleted ? 1 : -1; // Non-deleted items first
+  });
 
   return (
     <div className={cn("w-full md:w-80 flex-shrink-0 pixel-card flex flex-col h-full", className)} style={style}>
@@ -37,36 +42,40 @@ export function QueryHistoryPanel({
       </header>
       <ScrollArea className="flex-grow">
         <div className="p-3 space-y-2">
-          {userQueries.length === 0 && (
+          {sortedHistory.length === 0 && (
             <p className="text-sm text-muted-foreground text-center py-4 font-code">No hay consultas recientes.</p>
           )}
-          {userQueries.map((entry) => (
+          {sortedHistory.map((item) => (
             <div 
-              key={entry.id} 
+              key={item.id} 
               className={cn(
                 "flex items-center justify-between p-1.5 pixel-border-ghost hover:border-accent hover:shadow-pixel-accent",
-                !entry.isActive && "opacity-60 bg-muted/30"
+                item.deleted && "opacity-60 bg-muted/30"
               )}
             >
               <Button
                 variant="ghost"
                 className={cn(
-                  "flex-grow justify-start text-left h-auto py-1 px-1",
-                  !entry.isActive && "line-through"
+                  "flex-grow justify-start text-left h-auto py-1 px-1 flex flex-col items-start",
+                  item.deleted && "line-through"
                 )}
-                onClick={() => onLoadQuery(entry)}
-                title={`Cargar consulta: ${entry.text.substring(0,50)}...`}
+                onClick={() => onLoadQuery(item)}
+                title={`Cargar consulta: ${item.prompt.substring(0,50)}...`}
               >
-                <MessageSquareDashed className="w-4 h-4 mr-2 flex-shrink-0" />
-                <span className="truncate text-sm font-code">{entry.text}</span>
+                <div className="flex items-center w-full">
+                    <MessageSquareDashed className="w-4 h-4 mr-2 flex-shrink-0" />
+                    <span className="truncate text-sm font-code">{item.prompt}</span>
+                </div>
+                <ClientTimestamp date={new Date(item.timestamp)} className="text-xs text-muted-foreground/80 self-start ml-6" />
+
               </Button>
               <div className="flex-shrink-0 ml-1 space-x-1">
-                {entry.isActive ? (
+                {!item.deleted ? (
                   <Button
                     variant="ghost"
                     size="icon"
                     className="h-6 w-6 p-1 text-destructive hover:bg-destructive/20 hover:text-destructive-foreground"
-                    onClick={() => onSoftDeleteQueryItem(entry.id)}
+                    onClick={() => onSoftDeleteQueryItem(item.id)}
                     title="Eliminar consulta (lóg.)"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -76,7 +85,7 @@ export function QueryHistoryPanel({
                     variant="ghost"
                     size="icon"
                     className="h-6 w-6 p-1 text-green-600 hover:bg-green-500/20 hover:text-green-700"
-                    onClick={() => onRestoreQueryItem(entry.id)}
+                    onClick={() => onRestoreQueryItem(item.id)}
                     title="Restaurar consulta"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />

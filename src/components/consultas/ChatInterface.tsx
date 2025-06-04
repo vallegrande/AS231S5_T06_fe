@@ -5,41 +5,39 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, User, Bot, CornerDownLeft } from "lucide-react";
-import { chatWithGemini, type ChatWithGeminiInput } from "@/ai/flows/chatWithGemini";
+import { Loader2, Send, User, Bot } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { ClientTimestamp } from "@/components/common/ClientTimestamp";
+import { generateGeminiContent } from "@/lib/backend-api-client";
+import type { GeminiApiTest } from "@/types/backend";
 
-export interface ChatEntry {
+export interface DisplayChatEntry {
   id: string;
   type: "user" | "ai";
   text: string;
   timestamp: Date;
-  isActive: boolean; // Added for soft delete
 }
 
 interface ChatInterfaceProps {
-  onNewQueryResponse: (query: string, response: string) => void;
-  loadQuery: ChatEntry | null;
-  clearLoadedQuery: () => void;
+  onQuerySubmittedAndResponded: () => void; // Callback to notify parent to refetch history
+  loadQueryText: string | null; // Changed from ChatEntry to just the text
+  clearLoadedQueryText: () => void;
 }
 
-export function ChatInterface({ onNewQueryResponse, loadQuery, clearLoadedQuery }: ChatInterfaceProps) {
+export function ChatInterface({ onQuerySubmittedAndResponded, loadQueryText, clearLoadedQueryText }: ChatInterfaceProps) {
   const [userInput, setUserInput] = useState("");
-  const [chatLog, setChatLog] = useState<ChatEntry[]>([]);
+  const [chatLog, setChatLog] = useState<DisplayChatEntry[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     setChatLog([
-      { id: "0", type: "ai", text: "¡Hola! Soy Gemini, tu asistente virtual pixelado. ¿En qué puedo ayudarte hoy?", timestamp: new Date(), isActive: true }
+      { id: "0", type: "ai", text: "¡Hola! Soy Gemini, tu asistente virtual pixelado. ¿En qué puedo ayudarte hoy?", timestamp: new Date() }
     ]);
   }, []);
-
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -48,34 +46,32 @@ export function ChatInterface({ onNewQueryResponse, loadQuery, clearLoadedQuery 
   }, [chatLog]);
   
   useEffect(() => {
-    if (loadQuery) {
-      setUserInput(loadQuery.text);
+    if (loadQueryText) {
+      setUserInput(loadQueryText);
       textAreaRef.current?.focus();
-      clearLoadedQuery(); 
+      clearLoadedQueryText(); 
     }
-  }, [loadQuery, clearLoadedQuery]);
-
+  }, [loadQueryText, clearLoadedQueryText]);
 
   const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
     if (!userInput.trim() || isLoading) return;
 
-    const userMessage: ChatEntry = { id: Date.now().toString(), type: "user", text: userInput, timestamp: new Date(), isActive: true };
-    setChatLog(prevLog => [...prevLog.filter(entry => entry.isActive !== false), userMessage]); // Filter out inactive before adding
+    const userMessage: DisplayChatEntry = { id: Date.now().toString(), type: "user", text: userInput, timestamp: new Date() };
+    setChatLog(prevLog => [...prevLog, userMessage]);
     setIsLoading(true);
     const currentInput = userInput;
     setUserInput("");
 
     try {
-      const input: ChatWithGeminiInput = { message: currentInput };
-      const result = await chatWithGemini(input);
-      const aiMessage: ChatEntry = { id: (Date.now()+1).toString(), type: "ai", text: result.reply, timestamp: new Date(), isActive: true };
-      setChatLog(prevLog => [...prevLog.filter(entry => entry.isActive !== false), aiMessage]);
-      onNewQueryResponse(currentInput, result.reply);
+      const resultText = await generateGeminiContent(currentInput);
+      const aiMessage: DisplayChatEntry = { id: (Date.now()+1).toString(), type: "ai", text: resultText, timestamp: new Date() };
+      setChatLog(prevLog => [...prevLog, aiMessage]);
+      onQuerySubmittedAndResponded(); // Notify parent to refetch history from backend
     } catch (error) {
-      console.error("Error en chat con Gemini:", error);
-      const errorMessage: ChatEntry = {id: (Date.now()+1).toString(), type: "ai", text: "Lo siento, ocurrió un error al procesar tu solicitud pixelada.", timestamp: new Date(), isActive: true };
-      setChatLog(prevLog => [...prevLog.filter(entry => entry.isActive !== false), errorMessage]);
+      console.error("Error en chat con Gemini (backend):", error);
+      const errorMessage: DisplayChatEntry = {id: (Date.now()+1).toString(), type: "ai", text: "Lo siento, ocurrió un error al procesar tu solicitud pixelada.", timestamp: new Date() };
+      setChatLog(prevLog => [...prevLog, errorMessage]);
       toast({
         title: "Error de Comunicación 👾",
         description: (error as Error).message || "No se pudo obtener respuesta de la IA.",
@@ -90,7 +86,7 @@ export function ChatInterface({ onNewQueryResponse, loadQuery, clearLoadedQuery 
   return (
     <div className="flex flex-col h-full bg-card">
       <ScrollArea className="flex-grow p-3 space-y-3" ref={scrollAreaRef}>
-        {chatLog.filter(entry => entry.isActive).map((entry) => ( // Only display active entries in chat
+        {chatLog.map((entry) => (
           <div
             key={entry.id}
             className={cn(

@@ -1,7 +1,4 @@
-import {genkit} from 'genkit';
-import {googleAI} from '@genkit-ai/googleai';
 
-export const ai = genkit({
-  plugins: [googleAI()],
-  model: 'googleai/gemini-2.0-flash',
-});
+// This file is no longer needed as Genkit flows are removed.
+// Kept empty to satisfy the multi-file edit if it's the only file.
+// It should be deleted.
