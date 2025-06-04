@@ -1,14 +1,13 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Providers } from './providers'; // Import the new Providers component
 
 export const metadata: Metadata = {
   title: 'PixelDB Explorer',
   description: 'Explore and manage your pixelated database!',
 };
-
-const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
@@ -23,10 +22,10 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <QueryClientProvider client={queryClient}>
+        <Providers> {/* Use the Providers component here */}
           {children}
           <Toaster />
-        </QueryClientProvider>
+        </Providers>
       </body>
     </html>
   );
