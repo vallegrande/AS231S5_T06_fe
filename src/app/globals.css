@@ -3,48 +3,65 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Space Grotesk', Arial, Helvetica, sans-serif;
 }
 
 @layer base {
   :root {
-    --background: 0 0% 98%; /* Light Gray */
-    --foreground: 0 0% 9%; /* Dark Gray/Near Black */
+    /* Nueva paleta de colores inspirada en la imagen */
+    --app-bg: 60 30% 96%; /* Fondo principal muy claro, casi blanco (textura punteada no incluida) */
+    --panel-bg: 0 0% 100%; /* Fondo de los paneles (chat, historia, traductor) - blanco */
+    --panel-border: 0 0% 20%; /* Borde oscuro para los paneles */
+    
+    --header-bg: 145 60% 28%; /* Verde oscuro para el encabezado principal */
+    --header-fg: 0 0% 98%; /* Texto claro para el encabezado principal */
 
-    --card: 0 0% 100%; /* White */
-    --card-foreground: 0 0% 9%; /* Dark Gray/Near Black */
+    --text-primary: 0 0% 13%; /* Texto principal oscuro */
+    --text-secondary: 0 0% 35%; /* Texto secundario/muted */
+    --text-on-primary-button: 0 0% 98%;
+    --text-on-destructive-button: 0 0% 98%;
 
-    --popover: 0 0% 100%; /* White */
-    --popover-foreground: 0 0% 9%; /* Dark Gray/Near Black */
+    --button-primary-bg: 145 50% 45%; /* Verde para botón "Traducir" */
+    --button-destructive-bg: 0 72% 51%; /* Rojo para botón "Limpiar Historial" */
 
-    --primary: 221 83% 53%; /* Blue */
-    --primary-foreground: 0 0% 98%; /* Light Gray (for contrast on blue) */
+    /* Variables de ShadCN adaptadas */
+    --background: var(--app-bg); /* Usar el fondo de la app como base */
+    --foreground: var(--text-primary);
 
-    --secondary: 215 28% 80%; /* Lighter, slightly desaturated blue for secondary elements */
-    --secondary-foreground: 0 0% 9%; /* Dark Gray/Near Black */
+    --card: var(--panel-bg);
+    --card-foreground: var(--text-primary);
 
-    --muted: 0 0% 90%; /* Light Gray */
-    --muted-foreground: 0 0% 45%; /* Medium Gray */
+    --popover: var(--panel-bg);
+    --popover-foreground: var(--text-primary);
 
-    --accent: 158 79% 47%; /* Teal/Green */
-    --accent-foreground: 0 0% 9%; /* Dark Gray/Near Black (for contrast on accent) */
+    --primary: var(--header-bg); /* El verde oscuro del header como primario general */
+    --primary-foreground: var(--header-fg);
 
-    --destructive: 0 72% 51%; /* Red */
-    --destructive-foreground: 0 0% 98%; /* Light Gray */
+    --secondary: 215 28% 80%; /* Un azul claro desaturado para elementos secundarios */
+    --secondary-foreground: 0 0% 9%;
 
-    --border: 0 0% 89.8%; /* Light Gray Border */
-    --input: 0 0% 93%; /* Very Light Gray Input Background */
-    --ring: 221 83% 53%; /* Blue for focus rings */
+    --muted: 0 0% 90%; 
+    --muted-foreground: var(--text-secondary);
 
-    --radius: 0rem; /* Pixel art means sharp corners */
+    --accent: 158 79% 47%; /* Un verde azulado para acentos, puede ajustarse */
+    --accent-foreground: 0 0% 9%;
 
-    --chart-1: 221 83% 53%; /* primary blue */
-    --chart-2: 158 79% 47%; /* accent green/teal */
-    --chart-3: 36 90% 55%;  /* orange */
-    --chart-4: 300 76% 60%; /* purple */
-    --chart-5: 0 63% 50%;   /* reddish */
+    --destructive: var(--button-destructive-bg);
+    --destructive-foreground: var(--text-on-destructive-button);
 
-    /* Sidebar variables */
+    --border: var(--panel-border); /* Borde principal para componentes ShadCN */
+    --input: 0 0% 93%; 
+    --ring: var(--accent); 
+
+    --radius: 0rem; /* Mantener esquinas rectas */
+
+    --chart-1: 221 83% 53%;
+    --chart-2: 158 79% 47%;
+    --chart-3: 36 90% 55%;
+    --chart-4: 300 76% 60%;
+    --chart-5: 0 63% 50%;
+
+    /* Sidebar variables - pueden no ser usadas directamente en este diseño */
     --sidebar-background: 0 0% 95%;
     --sidebar-foreground: 0 0% 9%;
     --sidebar-primary: 221 83% 53%;
@@ -56,47 +73,50 @@ body {
   }
 
   .dark {
-    /* For now, .dark will also use the light theme values */
-    --background: 0 0% 98%;
-    --foreground: 0 0% 9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
-    --primary: 221 83% 53%;
-    --primary-foreground: 0 0% 98%;
+    /* Mantener tema claro por ahora, se puede definir un tema oscuro después si es necesario */
+    --app-bg: 60 30% 96%;
+    --panel-bg: 0 0% 100%;
+    --panel-border: 0 0% 20%;
+    --header-bg: 145 60% 28%;
+    --header-fg: 0 0% 98%;
+    --text-primary: 0 0% 13%;
+    --text-secondary: 0 0% 35%;
+    --text-on-primary-button: 0 0% 98%;
+    --text-on-destructive-button: 0 0% 98%;
+    --button-primary-bg: 145 50% 45%;
+    --button-destructive-bg: 0 72% 51%;
+
+    --background: var(--app-bg);
+    --foreground: var(--text-primary);
+    --card: var(--panel-bg);
+    --card-foreground: var(--text-primary);
+    --popover: var(--panel-bg);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--header-bg);
+    --primary-foreground: var(--header-fg);
     --secondary: 215 28% 80%;
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 90%;
-    --muted-foreground: 0 0% 45%;
+    --muted-foreground: var(--text-secondary);
     --accent: 158 79% 47%;
     --accent-foreground: 0 0% 9%;
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
+    --destructive: var(--button-destructive-bg);
+    --destructive-foreground: var(--text-on-destructive-button);
+    --border: var(--panel-border);
     --input: 0 0% 93%;
-    --ring: 221 83% 53%;
+    --ring: var(--accent);
     
     --chart-1: 221 83% 53%;
     --chart-2: 158 79% 47%;
     --chart-3: 36 90% 55%;
     --chart-4: 300 76% 60%;
     --chart-5: 0 63% 50%;
-
-    --sidebar-background: 0 0% 95%;
-    --sidebar-foreground: 0 0% 9%;
-    --sidebar-primary: 221 83% 53%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 158 79% 47%;
-    --sidebar-accent-foreground: 0 0% 9%;
-    --sidebar-border: 0 0% 85%;
-    --sidebar-ring: 221 83% 53%;
   }
 }
 
 @layer base {
   * {
-    @apply border-border rounded-none; /* Apply no border radius globally */
+    @apply border-border rounded-none; 
   }
   body {
     @apply bg-background text-foreground;
@@ -106,32 +126,23 @@ body {
   }
 }
 
-/* Custom pixel art styles adapt to new theme */
+/* Estilo para bordes tipo pixel art, si se mantiene */
 .pixel-border {
-  @apply border-2 border-foreground; /* Uses the new foreground for borders */
+  @apply border-2 border-foreground;
 }
 
-.pixel-shadow {
-  box-shadow: 4px 4px 0px hsl(var(--primary)); /* Primary color shadow */
-}
-.pixel-shadow-accent {
-  box-shadow: 4px 4px 0px hsl(var(--accent)); /* Accent color shadow */
-}
-.pixel-shadow-hard {
-   box-shadow: 2px 2px 0px hsl(var(--foreground) / 0.7), 4px 4px 0px hsl(var(--foreground) / 0.5), 6px 6px 0px hsl(var(--foreground) / 0.3);
-}
-/* Custom scrollbar for webkit browsers */
+/* Estilos para scrollbar personalizados */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: hsl(var(--background)); /* Light background for track */
+  background: hsl(var(--background));
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted)); /* Muted color for thumb */
-  border: 2px solid hsl(var(--background)); /* Border matching background */
+  background: hsl(var(--muted)); 
+  border: 2px solid hsl(var(--background));
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--accent)); /* Accent color on hover */
+  background: hsl(var(--accent));
 }

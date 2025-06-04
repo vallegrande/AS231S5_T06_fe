@@ -17,10 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { PixelSearchIcon } from '../icons/PixelSearchIcon';
-import { PixelTrashIcon } from '../icons/PixelTrashIcon';
-import { PixelRestoreIcon } from '../icons/PixelRestoreIcon';
-import { Loader2 } from 'lucide-react';
+import { Search, Trash2, RotateCcw, Loader2 } from 'lucide-react'; // Changed icons
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import Image from 'next/image';
 import { Badge } from '../ui/badge';
@@ -160,7 +157,7 @@ export function DeleteTab({ recordIdToDelete, onRecordDeletedOrRestored, clearRe
               aria-label="ID del registro a eliminar o restaurar"
             />
             <Button type="submit" disabled={isLoadingRecord || !idInput} className="bg-accent text-accent-foreground hover:bg-accent/90 pixel-border border-accent-foreground shadow-pixel-accent active:translate-x-[2px] active:translate-y-[2px] active:shadow-none">
-              {isLoadingRecord ? <Loader2 className="h-5 w-5 animate-spin" /> : <PixelSearchIcon className="h-5 w-5" />}
+              {isLoadingRecord ? <Loader2 className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5" />}
               <span className="ml-2 hidden sm:inline">Buscar Registro</span>
             </Button>
           </form>
@@ -197,7 +194,7 @@ export function DeleteTab({ recordIdToDelete, onRecordDeletedOrRestored, clearRe
                 disabled={deleteMutation.isPending}
                 className="w-full bg-destructive text-destructive-foreground hover:bg-destructive/90 pixel-border border-destructive-foreground shadow-[3px_3px_0px_hsl(var(--destructive-foreground))] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
               >
-                {deleteMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <PixelTrashIcon className="mr-2 h-4 w-4" />}
+                {deleteMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
                 Eliminar Registro (Lóg.)
               </Button>
             ) : (
@@ -207,7 +204,7 @@ export function DeleteTab({ recordIdToDelete, onRecordDeletedOrRestored, clearRe
                 disabled={restoreMutation.isPending}
                 className="w-full bg-green-600 text-white hover:bg-green-600/90 pixel-border border-green-300 shadow-[3px_3px_0px_hsl(var(--accent))] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
               >
-                {restoreMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <PixelRestoreIcon className="mr-2 h-4 w-4" />}
+                {restoreMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RotateCcw className="mr-2 h-4 w-4" />}
                 Restaurar Registro
               </Button>
             )}

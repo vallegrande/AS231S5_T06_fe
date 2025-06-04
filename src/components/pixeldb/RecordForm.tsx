@@ -20,8 +20,7 @@ import { useToast } from "@/hooks/use-toast";
 import { suggestTranslation, SuggestTranslationInput } from "@/ai/flows/suggest-translation";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PixelTranslateIcon } from "../icons/PixelTranslateIcon";
-import { Loader2 } from "lucide-react";
+import { Languages, Loader2 } from "lucide-react"; // Changed PixelTranslateIcon
 
 export const recordSchema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres").max(50, "El nombre debe tener 50 caracteres o menos"),
@@ -123,7 +122,7 @@ export function RecordForm({ onSubmit, defaultValues, isSubmitting = false, subm
                       className="absolute top-2 right-2 p-1 h-8 w-8 text-accent hover:text-accent hover:bg-accent/20"
                       title="Sugerir Traducción al Inglés"
                     >
-                      {isTranslating ? <Loader2 className="h-4 w-4 animate-spin" /> : <PixelTranslateIcon className="h-5 w-5" />}
+                      {isTranslating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Languages className="h-5 w-5" />}
                     </Button>
                   </div>
                   <FormDescription>Describe el objeto. Puedes usar IA para sugerir una traducción al inglés.</FormDescription>

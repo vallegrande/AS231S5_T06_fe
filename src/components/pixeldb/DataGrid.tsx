@@ -13,9 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from 'next/image';
-import { PixelEditIcon } from '@/components/icons/PixelEditIcon';
-import { PixelTrashIcon } from '@/components/icons/PixelTrashIcon';
-import { PixelRestoreIcon } from '@/components/icons/PixelRestoreIcon';
+import { Edit3, Trash2, RotateCcw } from 'lucide-react'; // Changed icons
 import { cn } from '@/lib/utils';
 
 interface DataGridProps {
@@ -37,7 +35,6 @@ export function DataGrid({ records, caption, onEdit, onDelete, onRestore, showIn
   };
   
   const getStatusClass = (isActive: boolean) => {
-    // Using Tailwind classes directly for more control over light theme colors
     return isActive ? "bg-green-100 text-green-700 border-green-300" : "bg-red-100 text-red-700 border-red-300";
   }
 
@@ -93,19 +90,19 @@ export function DataGrid({ records, caption, onEdit, onDelete, onRestore, showIn
                 <div className="flex gap-1 justify-end">
                   {onEdit && record.isActive && (
                     <Button variant="outline" size="sm" onClick={() => onEdit(record.id)} className="pixel-border border-accent text-accent hover:bg-accent hover:text-accent-foreground p-2">
-                      <PixelEditIcon className="w-4 h-4" />
+                      <Edit3 className="w-4 h-4" />
                       <span className="sr-only">Editar</span>
                     </Button>
                   )}
                   {record.isActive && onDelete && (
                     <Button variant="outline" size="sm" onClick={() => onDelete(record.id)} className="pixel-border border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground p-2">
-                      <PixelTrashIcon className="w-4 h-4" />
+                      <Trash2 className="w-4 h-4" />
                        <span className="sr-only">Eliminar</span>
                     </Button>
                   )}
                   {!record.isActive && onRestore && (
                      <Button variant="outline" size="sm" onClick={() => onRestore(record.id)} className="pixel-border border-green-500 text-green-600 hover:bg-green-500 hover:text-white p-2">
-                      <PixelRestoreIcon className="w-4 h-4" />
+                      <RotateCcw className="w-4 h-4" />
                        <span className="sr-only">Restaurar</span>
                     </Button>
                   )}

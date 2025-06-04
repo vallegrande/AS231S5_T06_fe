@@ -8,8 +8,7 @@ import { RecordForm, type RecordFormData } from './RecordForm';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { PixelSearchIcon } from '../icons/PixelSearchIcon';
-import { Loader2 } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react'; // Changed PixelSearchIcon
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface UpdateTabProps {
@@ -108,7 +107,7 @@ export function UpdateTab({ recordIdToUpdate, onRecordUpdated, clearRecordIdToUp
               aria-label="ID del registro a actualizar"
             />
             <Button type="submit" disabled={isLoadingRecord || !idInput} className="bg-accent text-accent-foreground hover:bg-accent/90 pixel-border border-accent-foreground shadow-pixel-accent active:translate-x-[2px] active:translate-y-[2px] active:shadow-none">
-              {isLoadingRecord ? <Loader2 className="h-5 w-5 animate-spin" /> : <PixelSearchIcon className="h-5 w-5" />}
+              {isLoadingRecord ? <Loader2 className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5" />}
                <span className="ml-2 hidden sm:inline">Buscar Registro</span>
             </Button>
           </form>

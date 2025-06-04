@@ -1,109 +1,17 @@
 "use client";
 
-import { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { QueryTab } from '@/components/pixeldb/QueryTab';
-import { CreateTab } from '@/components/pixeldb/CreateTab';
-import { UpdateTab } from '@/components/pixeldb/UpdateTab';
-import { DeleteTab } from '@/components/pixeldb/DeleteTab';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { PixelSearchIcon } from '@/components/icons/PixelSearchIcon';
-import { PixelPlusIcon } from '@/components/icons/PixelPlusIcon';
-import { PixelEditIcon } from '@/components/icons/PixelEditIcon';
-import { PixelTrashIcon } from '@/components/icons/PixelTrashIcon';
+import { AppHeader } from "@/components/layout/AppHeader";
+import { ConsultasSection } from "@/components/consultas/ConsultasSection";
+import { TraductorSection } from "@/components/traductor/TraductorSection";
 
-type TabValue = "query" | "create" | "update" | "delete";
-
-export default function PixelDBExplorerPage() {
-  const [activeTab, setActiveTab] = useState<TabValue>("query");
-  const [recordIdToUpdate, setRecordIdToUpdate] = useState<string | null>(null);
-  const [recordIdToDelete, setRecordIdToDelete] = useState<string | null>(null);
-
-  const handleEditRecord = (id: string) => {
-    setRecordIdToUpdate(id);
-    setActiveTab("update");
-  };
-
-  const handleDeleteRecord = (id: string) => {
-    setRecordIdToDelete(id);
-    setActiveTab("delete");
-  };
-  
-  const handleRestoreRecord = (id: string) => {
-    setRecordIdToDelete(id);
-    setActiveTab("delete");
-  };
-
-  const clearRecordIdToUpdate = () => setRecordIdToUpdate(null);
-  const clearRecordIdToDelete = () => setRecordIdToDelete(null);
-
-  const handleRecordCreated = () => {
-    setActiveTab("query");
-  }
-
-  const handleRecordUpdated = () => {
-    setActiveTab("query");
-  }
-  
-  const handleRecordDeletedOrRestored = () => {
-     setActiveTab("query");
-  }
-
-
+export default function MainPage() {
   return (
-    <div className="min-h-screen container mx-auto p-4 md:p-8 font-body">
-      <Card className="bg-card/80 pixel-border shadow-pixel-primary mb-8 backdrop-blur-sm">
-        <CardHeader className="text-center">
-          <CardTitle className="text-4xl md:text-5xl font-headline text-primary tracking-wider">
-            Asistente IA de Consultas
-          </CardTitle>
-          <CardDescription className="text-muted-foreground text-lg">
-            Consulta tus datos y obtén traducciones con IA.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-
-      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as TabValue)} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-1 p-1 bg-muted/30 h-auto pixel-border">
-          <TabsTrigger value="query" className="py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-pixel-primary pixel-border border-transparent hover:bg-primary/20 transition-all duration-150">
-            <PixelSearchIcon className="w-5 h-5 mr-2" /> Consultar
-          </TabsTrigger>
-          <TabsTrigger value="create" className="py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-pixel-primary pixel-border border-transparent hover:bg-primary/20 transition-all duration-150">
-            <PixelPlusIcon className="w-5 h-5 mr-2" /> Crear
-          </TabsTrigger>
-          <TabsTrigger value="update" className="py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-pixel-primary pixel-border border-transparent hover:bg-primary/20 transition-all duration-150">
-            <PixelEditIcon className="w-5 h-5 mr-2" /> Actualizar
-          </TabsTrigger>
-          <TabsTrigger value="delete" className="py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-pixel-primary pixel-border border-transparent hover:bg-primary/20 transition-all duration-150">
-            <PixelTrashIcon className="w-5 h-5 mr-2" /> Eliminar/Restaurar
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="query" className="mt-4 animate-fade-in">
-          <QueryTab 
-            onEditRecord={handleEditRecord} 
-            onDeleteRecord={handleDeleteRecord}
-            onRestoreRecord={handleRestoreRecord}
-          />
-        </TabsContent>
-        <TabsContent value="create" className="mt-4 animate-fade-in">
-          <CreateTab onRecordCreated={handleRecordCreated} />
-        </TabsContent>
-        <TabsContent value="update" className="mt-4 animate-fade-in">
-          <UpdateTab 
-            recordIdToUpdate={recordIdToUpdate} 
-            onRecordUpdated={handleRecordUpdated}
-            clearRecordIdToUpdate={clearRecordIdToUpdate}
-          />
-        </TabsContent>
-        <TabsContent value="delete" className="mt-4 animate-fade-in">
-          <DeleteTab 
-            recordIdToDelete={recordIdToDelete} 
-            onRecordDeletedOrRestored={handleRecordDeletedOrRestored}
-            clearRecordIdToDelete={clearRecordIdToDelete}
-          />
-        </TabsContent>
-      </Tabs>
+    <div className="flex flex-col min-h-screen bg-app-bg text-text-primary">
+      <AppHeader />
+      <main className="flex flex-1 flex-col md:flex-row p-3 md:p-4 gap-3 md:gap-4 overflow-hidden">
+        <ConsultasSection />
+        <TraductorSection />
+      </main>
     </div>
   );
 }
