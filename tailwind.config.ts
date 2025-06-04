@@ -1,7 +1,7 @@
 import type {Config} from 'tailwindcss';
 
 export default {
-  darkMode: ['class'],
+  darkMode: ['class'], // 'media' or 'class'
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -10,9 +10,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Inter', 'sans-serif'],
-        headline: ['Inter', 'sans-serif'],
-        code: ['monospace'],
+        body: ['"Space Grotesk"', 'sans-serif'],
+        headline: ['"Space Grotesk"', 'sans-serif'],
+        code: ['"Space Grotesk"', 'monospace'], // Using Space Grotesk for code as well for consistency in pixel theme
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -67,9 +67,15 @@ export default {
         },
       },
       borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+        lg: 'var(--radius)', // Should be 0rem based on globals.css
+        md: 'var(--radius)',
+        sm: 'var(--radius)',
+      },
+      boxShadow: {
+        'pixel-primary': '3px 3px 0px hsl(var(--primary))',
+        'pixel-accent': '3px 3px 0px hsl(var(--accent))',
+        'pixel-foreground': '3px 3px 0px hsl(var(--foreground))',
+        'pixel-primary-inset': 'inset 2px 2px 0px hsl(var(--primary)/0.7), inset -2px -2px 0px hsl(var(--primary)/1.3)',
       },
       keyframes: {
         'accordion-down': {
@@ -88,10 +94,20 @@ export default {
             height: '0',
           },
         },
+        'slide-in': {
+          '0%': { transform: 'translateY(100%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'slide-in': 'slide-in 0.3s ease-out forwards',
+        'fade-in': 'fade-in 0.3s ease-out forwards',
       },
     },
   },
