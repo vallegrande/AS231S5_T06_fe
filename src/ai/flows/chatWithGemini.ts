@@ -10,12 +10,12 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const ChatWithGeminiInputSchema = z.object({
+const ChatWithGeminiInputSchema = z.object({
   message: z.string().describe('El mensaje del usuario para enviar a la IA.'),
 });
 export type ChatWithGeminiInput = z.infer<typeof ChatWithGeminiInputSchema>;
 
-export const ChatWithGeminiOutputSchema = z.object({
+const ChatWithGeminiOutputSchema = z.object({
   reply: z.string().describe('La respuesta generada por la IA.'),
 });
 export type ChatWithGeminiOutput = z.infer<typeof ChatWithGeminiOutputSchema>;
