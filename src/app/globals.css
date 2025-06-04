@@ -15,22 +15,22 @@ body {
     --card-foreground: 220 25% 10%;
     --popover: 0 0% 100%;
     --popover-foreground: 220 25% 10%;
-    --primary: 330 85% 55%; /* Vibrant Pink/Magenta */
+    --primary: 340 90% 60%; /* Brighter Pink/Magenta */
     --primary-foreground: 0 0% 100%; /* White */
-    --primary-shadow-color: 330 85% 40%; /* Darker shade for shadow */
-    --secondary: 190 80% 50%; /* Bright Cyan/Teal */
+    --primary-shadow-color: 340 90% 45%; /* Darker shade for shadow */
+    --secondary: 180 85% 55%; /* Brighter Cyan/Teal */
     --secondary-foreground: 220 25% 10%; /* Dark Blue-Gray for contrast */
     --muted: 220 15% 88%; /* Light Gray */
     --muted-foreground: 220 10% 45%; /* Medium Gray */
-    --accent: 50 90% 55%; /* Bright Yellow/Gold */
-    --accent-foreground: 240 25% 10%; /* Dark Blue for contrast */
-    --accent-shadow-color: 50 90% 40%; /* Darker shade for shadow */
-    --destructive: 0 80% 55%; /* Bright Red */
+    --accent: 45 95% 60%; /* Brighter Yellow/Gold */
+    --accent-foreground: 50 25% 10%; /* Very Dark Brown for contrast */
+    --accent-shadow-color: 45 95% 45%; /* Darker shade for shadow */
+    --destructive: 0 85% 60%; /* Brighter Red */
     --destructive-foreground: 0 0% 100%; /* White */
     --border: 220 15% 70%; /* Mid Gray */
     --input: 0 0% 100%; /* White */
     --input-border: 220 15% 80%; /* Light-Mid Gray */
-    --ring: 330 85% 55%; /* Primary color for rings */
+    --ring: 340 90% 60%; /* Primary color for rings */
     --radius: 0rem; /* Square corners */
     --chart-1: var(--primary);
     --chart-2: var(--accent);
@@ -52,28 +52,28 @@ body {
   }
 
   .dark {
-    --background: 230 20% 12%; /* Dark Blue-Black */
-    --foreground: 210 15% 90%; /* Off-White */
-    --card: 230 20% 18%; /* Darker Blue-Gray */
-    --card-foreground: 210 15% 90%;
-    --popover: 230 20% 18%;
-    --popover-foreground: 210 15% 90%;
-    --primary: 330 75% 60%; /* Vibrant Pink/Magenta - Dark */
-    --primary-foreground: 230 15% 10%; /* Very Dark Gray for contrast */
-    --primary-shadow-color: 330 75% 45%;
-    --secondary: 190 70% 55%; /* Bright Cyan/Teal - Dark */
-    --secondary-foreground: 210 15% 90%; /* Off-White */
-    --muted: 220 15% 25%; /* Dark Gray */
-    --muted-foreground: 220 10% 60%; /* Light Gray */
-    --accent: 50 80% 60%; /* Bright Yellow/Gold - Dark */
-    --accent-foreground: 50 25% 10%; /* Very Dark Brown for contrast */
-    --accent-shadow-color: 50 80% 45%;
-    --destructive: 0 70% 60%; /* Bright Red - Dark */
+    --background: 230 20% 10%; /* Darker Blue-Black */
+    --foreground: 210 15% 95%; /* Lighter Off-White */
+    --card: 230 20% 15%; /* Even Darker Blue-Gray */
+    --card-foreground: 210 15% 95%;
+    --popover: 230 20% 15%;
+    --popover-foreground: 210 15% 95%;
+    --primary: 340 80% 65%; /* Vibrant Pink/Magenta - Dark */
+    --primary-foreground: 230 15% 5%; /* Very Dark Gray for contrast */
+    --primary-shadow-color: 340 80% 50%;
+    --secondary: 180 75% 60%; /* Bright Cyan/Teal - Dark */
+    --secondary-foreground: 210 15% 95%; /* Off-White */
+    --muted: 220 15% 22%; /* Darker Gray */
+    --muted-foreground: 220 10% 65%; /* Lighter Gray */
+    --accent: 45 85% 65%; /* Bright Yellow/Gold - Dark */
+    --accent-foreground: 50 25% 5%; /* Very Dark Brown for contrast */
+    --accent-shadow-color: 45 85% 50%;
+    --destructive: 0 75% 65%; /* Bright Red - Dark */
     --destructive-foreground: 0 15% 5%; /* Almost Black */
-    --border: 220 15% 35%; /* Dark-Mid Gray */
-    --input: 220 20% 22%; /* Darker Gray */
-    --input-border: 220 15% 30%; /* Dark Gray */
-    --ring: 330 75% 60%; /* Primary color for rings - Dark */
+    --border: 220 15% 30%; /* Darker-Mid Gray */
+    --input: 220 20% 18%; /* Darker Gray */
+    --input-border: 220 15% 25%; /* Dark Gray */
+    --ring: 340 80% 65%; /* Primary color for rings - Dark */
   }
 }
 
@@ -104,6 +104,7 @@ body {
 .pixel-border-accent {
   @apply border-2 border-[hsl(var(--accent-shadow-color))];
 }
+
 .pixel-shadow {
   box-shadow: 3px 3px 0px hsl(var(--foreground) / 0.7);
 }
@@ -160,10 +161,10 @@ body {
 }
 
 .pixel-tabs-trigger[data-state="active"] {
-  @apply bg-primary text-primary-foreground shadow-[2px_2px_0px_hsl(var(--primary-shadow-color))];
+  @apply bg-primary text-primary-foreground;
+  box-shadow: 2px 2px 0px hsl(var(--primary-shadow-color));
   animation: pixel-pulse 0.7s infinite cubic-bezier(0.4, 0, 0.6, 1);
 }
-
 
 .pixel-card {
   @apply bg-card pixel-border pixel-shadow;
@@ -188,7 +189,7 @@ body {
    @apply bg-destructive text-destructive-foreground border-2 border-[hsl(var(--destructive)/0.7)] pixel-shadow-destructive active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-75 hover:animate-pixel-jump;
 }
 .pixel-button-ghost {
-  @apply border-2 border-transparent hover:bg-accent/20 hover:pixel-border-accent active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all duration-75 hover:pixel-shadow-accent hover:animate-pixel-jump;
+  @apply border-2 border-transparent hover:bg-accent/20 hover:border-[hsl(var(--accent-shadow-color))] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all duration-75 hover:shadow-[3px_3px_0px_hsl(var(--accent-shadow-color))] hover:animate-pixel-jump;
 }
 
 .animate-text-pop-in {
@@ -227,5 +228,3 @@ body {
   0% { opacity: 0; }
   100% { opacity: 1; }
 }
-
-    
