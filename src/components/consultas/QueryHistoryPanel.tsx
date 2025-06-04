@@ -45,7 +45,9 @@ export function QueryHistoryPanel({
           {sortedHistory.length === 0 && (
             <p className="text-sm text-muted-foreground text-center py-4 font-code">No hay consultas recientes.</p>
           )}
-          {sortedHistory.map((item) => (
+          {sortedHistory
+            .filter(item => item && item.id) // Filter out items with no id
+            .map((item) => (
             <div 
               key={item.id} 
               className={cn(

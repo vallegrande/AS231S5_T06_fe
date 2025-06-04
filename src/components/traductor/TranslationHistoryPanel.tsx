@@ -63,7 +63,9 @@ export function TranslationHistoryPanel({
           {sortedHistory.length === 0 && (
             <p className="text-sm text-muted-foreground text-center py-4 font-code">No hay traducciones recientes.</p>
           )}
-          {sortedHistory.map((record) => (
+          {sortedHistory
+            .filter(record => record && record.id) // Filter out records with no id
+            .map((record) => (
             <div 
               key={record.id} 
               className={cn(
