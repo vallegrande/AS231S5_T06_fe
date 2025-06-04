@@ -12,14 +12,35 @@ export function ConsultasSection() {
   const [selectedQuery, setSelectedQuery] = useState<ChatEntry | null>(null);
 
   const handleNewQueryResponse = (query: string, response: string) => {
-    const newEntry: ChatEntry = { id: Date.now().toString(), type: 'user', text: query, timestamp: new Date() };
-    const newResponseEntry: ChatEntry = { id: (Date.now()+1).toString(), type: 'ai', text: response, timestamp: new Date() };
-    // Guardar solo las últimas 10 *pares* de interacciones (20 entradas)
-    setQueryHistory(prev => [newEntry, newResponseEntry, ...prev.slice(0, 18)]); 
+    const newUserEntry: ChatEntry = { 
+      id: Date.now().toString(), 
+      type: 'user', 
+      text: query, 
+      timestamp: new Date(),
+      isActive: true,
+    };
+    const newAiEntry: ChatEntry = { 
+      id: (Date.now() + 1).toString(), 
+      type: 'ai', 
+      text: response, 
+      timestamp: new Date(),
+      isActive: true,
+    };
+    // Keep all entries, including soft-deleted ones, up to a limit.
+    // History panel will filter/style based on isActive.
+    setQueryHistory(prev => [newUserEntry, newAiEntry, ...prev.slice(0, 48)]); // e.g. last 25 interactions (50 entries)
   };
   
   const handleLoadQuery = (query: ChatEntry) => {
     setSelectedQuery(query);
+  };
+
+  const handleSoftDeleteQueryItem = (id: string) => {
+    setQueryHistory(prev => prev.map(item => item.id === id ? { ...item, isActive: false } : item));
+  };
+
+  const handleRestoreQueryItem = (id: string) => {
+    setQueryHistory(prev => prev.map(item => item.id === id ? { ...item, isActive: true } : item));
   };
 
   return (
@@ -43,6 +64,8 @@ export function ConsultasSection() {
       <QueryHistoryPanel 
         history={queryHistory} 
         onLoadQuery={handleLoadQuery} 
+        onSoftDeleteQueryItem={handleSoftDeleteQueryItem}
+        onRestoreQueryItem={handleRestoreQueryItem}
         className="md:w-96 animate-slide-in-up md:animate-fade-in"
         style={{ animationDelay: '0.1s' }}
       />

@@ -16,6 +16,7 @@ export interface ChatEntry {
   type: "user" | "ai";
   text: string;
   timestamp: Date;
+  isActive: boolean; // Added for soft delete
 }
 
 interface ChatInterfaceProps {
@@ -35,7 +36,7 @@ export function ChatInterface({ onNewQueryResponse, loadQuery, clearLoadedQuery 
 
   useEffect(() => {
     setChatLog([
-      { id: "0", type: "ai", text: "¡Hola! Soy Gemini, tu asistente virtual pixelado. ¿En qué puedo ayudarte hoy?", timestamp: new Date() }
+      { id: "0", type: "ai", text: "¡Hola! Soy Gemini, tu asistente virtual pixelado. ¿En qué puedo ayudarte hoy?", timestamp: new Date(), isActive: true }
     ]);
   }, []);
 
@@ -59,8 +60,8 @@ export function ChatInterface({ onNewQueryResponse, loadQuery, clearLoadedQuery 
     e?.preventDefault();
     if (!userInput.trim() || isLoading) return;
 
-    const userMessage: ChatEntry = { id: Date.now().toString(), type: "user", text: userInput, timestamp: new Date() };
-    setChatLog(prevLog => [...prevLog, userMessage]);
+    const userMessage: ChatEntry = { id: Date.now().toString(), type: "user", text: userInput, timestamp: new Date(), isActive: true };
+    setChatLog(prevLog => [...prevLog.filter(entry => entry.isActive !== false), userMessage]); // Filter out inactive before adding
     setIsLoading(true);
     const currentInput = userInput;
     setUserInput("");
@@ -68,13 +69,13 @@ export function ChatInterface({ onNewQueryResponse, loadQuery, clearLoadedQuery 
     try {
       const input: ChatWithGeminiInput = { message: currentInput };
       const result = await chatWithGemini(input);
-      const aiMessage: ChatEntry = { id: (Date.now()+1).toString(), type: "ai", text: result.reply, timestamp: new Date() };
-      setChatLog(prevLog => [...prevLog, aiMessage]);
+      const aiMessage: ChatEntry = { id: (Date.now()+1).toString(), type: "ai", text: result.reply, timestamp: new Date(), isActive: true };
+      setChatLog(prevLog => [...prevLog.filter(entry => entry.isActive !== false), aiMessage]);
       onNewQueryResponse(currentInput, result.reply);
     } catch (error) {
       console.error("Error en chat con Gemini:", error);
-      const errorMessage: ChatEntry = {id: (Date.now()+1).toString(), type: "ai", text: "Lo siento, ocurrió un error al procesar tu solicitud pixelada.", timestamp: new Date() };
-      setChatLog(prevLog => [...prevLog, errorMessage]);
+      const errorMessage: ChatEntry = {id: (Date.now()+1).toString(), type: "ai", text: "Lo siento, ocurrió un error al procesar tu solicitud pixelada.", timestamp: new Date(), isActive: true };
+      setChatLog(prevLog => [...prevLog.filter(entry => entry.isActive !== false), errorMessage]);
       toast({
         title: "Error de Comunicación 👾",
         description: (error as Error).message || "No se pudo obtener respuesta de la IA.",
@@ -89,7 +90,7 @@ export function ChatInterface({ onNewQueryResponse, loadQuery, clearLoadedQuery 
   return (
     <div className="flex flex-col h-full bg-card">
       <ScrollArea className="flex-grow p-3 space-y-3" ref={scrollAreaRef}>
-        {chatLog.map((entry) => (
+        {chatLog.filter(entry => entry.isActive).map((entry) => ( // Only display active entries in chat
           <div
             key={entry.id}
             className={cn(
