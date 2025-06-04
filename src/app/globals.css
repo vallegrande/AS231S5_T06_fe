@@ -104,15 +104,15 @@ body {
     position: fixed;
     bottom: 20px; /* Ajusta el espaciado desde abajo */
     right: 20px;  /* Ajusta el espaciado desde la derecha */
-    width: 128px;  /* Ancho deseado para BMO (tamaño mediano) */
-    height: 160px; /* Alto deseado para BMO (tamaño mediano) */
-    /* 
-      IMPORTANTE: Reemplaza la URL de placeholder por la URL de tu imagen de BMO.
+    width: 256px;  /* Ancho deseado para BMO (tamaño grande) */
+    height: 320px; /* Alto deseado para BMO (tamaño grande) */
+    /*
+      IMPORTANTE: Reemplaza la URL de placeholder por la URL de tu imagen de BMO (256x320px).
       Puedes subirla a un servicio de hosting o ponerla en tu carpeta `public`.
       Ej: si está en public/bmo.png, usa url('/bmo.png').
       Pista para búsqueda de imagen AI: BMO adventure time
     */
-    background-image: url('https://placehold.co/128x160.png'); 
+    background-image: url('https://placehold.co/256x320.png');
     background-size: contain; /* Asegura que toda la imagen quepa, manteniendo la proporción */
     background-repeat: no-repeat;
     background-position: center; /* Centra la imagen dentro del pseudo-elemento */
@@ -190,12 +190,11 @@ body {
   @apply hover:bg-accent/30;
 }
 .pixel-tabs-trigger:hover:not([data-state="active"]) {
-   box-shadow: 2px 2px 0px hsl(var(--accent-shadow-color));
+   @apply shadow-[2px_2px_0px_hsl(var(--accent-shadow-color))];
 }
 
 .pixel-tabs-trigger[data-state="active"] {
-  @apply bg-primary text-primary-foreground;
-  box-shadow: 2px 2px 0px hsl(var(--primary-shadow-color));
+  @apply bg-primary text-primary-foreground shadow-[2px_2px_0px_hsl(var(--primary-shadow-color))];
   animation: pixel-pulse 0.7s infinite cubic-bezier(0.4, 0, 0.6, 1);
 }
 
@@ -223,7 +222,6 @@ body {
 }
 .pixel-button-ghost {
   @apply border-2 border-transparent hover:bg-accent/20 active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all duration-75 hover:animate-pixel-jump;
-  /* Se aplican los estilos de borde y sombra directamente en el estado hover */
   @apply hover:border-2 hover:border-[hsl(var(--accent-shadow-color))] hover:shadow-[3px_3px_0px_hsl(var(--accent-shadow-color))];
 }
 
@@ -263,3 +261,5 @@ body {
   0% { opacity: 0; }
   100% { opacity: 1; }
 }
+
+    
