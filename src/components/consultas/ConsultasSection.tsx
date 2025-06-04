@@ -3,7 +3,7 @@
 
 import { ChatInterface } from "./ChatInterface";
 import { QueryHistoryPanel } from "./QueryHistoryPanel";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getGeminiHistory, softDeleteGeminiHistoryItem, restoreGeminiHistoryItem } from '@/lib/backend-api-client';
 import type { GeminiApiTest } from "@/types/backend";
@@ -19,6 +19,12 @@ export function ConsultasSection() {
     queryKey: ['geminiHistory'],
     queryFn: getGeminiHistory,
   });
+
+  useEffect(() => {
+    if (historyError) {
+      toast({ title: "Error al Cargar Historial", description: historyError.message, variant: "destructive"});
+    }
+  }, [historyError, toast]);
 
   const softDeleteMutation = useMutation({
     mutationFn: softDeleteGeminiHistoryItem,
@@ -57,10 +63,6 @@ export function ConsultasSection() {
   const handleRestoreQueryItem = (id: string) => {
     restoreMutation.mutate(id);
   };
-
-  if (historyError) {
-    toast({ title: "Error al Cargar Historial", description: historyError.message, variant: "destructive"});
-  }
 
   return (
     <div className="flex flex-col md:flex-row gap-3 md:gap-4 h-full">

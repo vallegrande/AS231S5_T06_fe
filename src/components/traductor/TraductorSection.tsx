@@ -13,6 +13,7 @@ import {
 import type { BackendTranslationRecord } from '@/types/backend';
 import { Languages, History, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
 export function TraductorSection() {
   const queryClient = useQueryClient();
@@ -22,6 +23,12 @@ export function TraductorSection() {
     queryKey: ['translationHistory'],
     queryFn: getTranslationHistory,
   });
+
+  useEffect(() => {
+    if (historyError) {
+      toast({ title: "Error al Cargar Historial de Traducción", description: historyError.message, variant: "destructive"});
+    }
+  }, [historyError, toast]);
 
   const handleNewTranslationCompleted = () => {
     refetchHistory();
@@ -72,10 +79,6 @@ export function TraductorSection() {
     restoreMutation.mutate(id);
   };
   
-  if (historyError) {
-    toast({ title: "Error al Cargar Historial de Traducción", description: historyError.message, variant: "destructive"});
-  }
-
   return (
     <div className="flex flex-col md:flex-row gap-3 md:gap-4 h-full">
       <div className="flex-grow-[2] flex flex-col pixel-card overflow-hidden animate-slide-in-up">
