@@ -1,10 +1,10 @@
+
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TranslationForm } from "./TranslationForm";
 import { TranslationHistoryPanel, type TranslationRecord } from "./TranslationHistoryPanel";
 import { useState } from "react";
-import { Languages } from "lucide-react";
+import { Languages, PanelLeft, History } from "lucide-react";
 
 export function TraductorSection() {
   const [translationHistory, setTranslationHistory] = useState<TranslationRecord[]>([]);
@@ -26,19 +26,25 @@ export function TraductorSection() {
   };
 
   return (
-    <section className="w-full md:w-[450px] flex-shrink-0 flex flex-col gap-4 h-[calc(100vh-100px)] md:h-auto">
-      <Card className="flex-grow-[2] flex flex-col border-panel-border bg-panel-bg shadow-lg">
-        <CardHeader className="p-3 border-b border-panel-border">
-          <CardTitle className="text-lg text-primary flex items-center">
-            <Languages className="w-5 h-5 mr-2" />
-            Traductor IA
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-3">
+    <div className="flex flex-col md:flex-row gap-3 md:gap-4 h-full">
+      {/* Panel de Traducción Principal */}
+      <div className="flex-grow-[2] flex flex-col pixel-card overflow-hidden animate-slide-in-up">
+        <header className="p-3 border-b-2 border-foreground bg-card flex items-center">
+          <Languages className="w-6 h-6 mr-2 text-primary" />
+          <h2 className="text-xl font-headline text-primary">Traductor con IA</h2>
+        </header>
+        <div className="p-3 flex-grow">
           <TranslationForm onNewTranslation={handleNewTranslation} />
-        </CardContent>
-      </Card>
-      <TranslationHistoryPanel history={translationHistory} onClearHistory={handleClearHistory} />
-    </section>
+        </div>
+      </div>
+
+      {/* Panel de Historial de Traducciones */}
+      <TranslationHistoryPanel 
+        history={translationHistory} 
+        onClearHistory={handleClearHistory} 
+        className="md:w-96 animate-slide-in-up md:animate-fade-in"
+        style={{ animationDelay: '0.1s' }}
+      />
+    </div>
   );
 }

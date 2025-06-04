@@ -8,109 +8,107 @@ body {
 
 @layer base {
   :root {
-    /* Nueva paleta de colores inspirada en la imagen */
-    --app-bg: 60 30% 96%; /* Fondo principal muy claro, casi blanco (textura punteada no incluida) */
-    --panel-bg: 0 0% 100%; /* Fondo de los paneles (chat, historia, traductor) - blanco */
-    --panel-border: 0 0% 20%; /* Borde oscuro para los paneles */
+    /* Paleta Pixel Art Vibrante */
+    --background: 220 15% 95%; /* Fondo principal claro, ligeramente azulado */
+    --foreground: 220 25% 10%; /* Texto principal oscuro */
+
+    --card: 0 0% 100%; /* Fondo de los paneles/cards - blanco */
+    --card-foreground: var(--foreground);
+
+    --popover: var(--card);
+    --popover-foreground: var(--card-foreground);
+
+    --primary: 240 70% 60%; /* Azul vibrante como primario */
+    --primary-foreground: 0 0% 100%; /* Texto blanco para botones primarios */
+
+    --secondary: 50 80% 60%; /* Amarillo/Naranja como secundario */
+    --secondary-foreground: 220 25% 10%;
+
+    --muted: 220 15% 88%; 
+    --muted-foreground: 220 10% 45%;
+
+    --accent: 160 70% 50%; /* Verde azulado como acento */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 80% 55%; /* Rojo vibrante para destructivo */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 70%; 
+    --input: 0 0% 100%; /* Fondo de inputs blanco */
+    --input-border: 220 15% 80%;
+    --ring: var(--primary); 
+
+    --radius: 0rem; /* Esquinas rectas para estilo pixel */
+
+    --chart-1: var(--primary);
+    --chart-2: var(--accent);
+    --chart-3: 36 90% 55%; /* Naranja */
+    --chart-4: 300 76% 60%; /* Magenta */
+    --chart-5: 0 63% 50%; /* Rojo oscuro */
+
+    /* Variables específicas de la app anterior que se pueden reutilizar o adaptar */
+    --app-bg: var(--background);
+    --panel-bg: var(--card);
+    --panel-border: var(--border);
     
-    --header-bg: 145 60% 28%; /* Verde oscuro para el encabezado principal */
-    --header-fg: 0 0% 98%; /* Texto claro para el encabezado principal */
+    --header-bg: var(--primary); 
+    --header-fg: var(--primary-foreground);
 
-    --text-primary: 0 0% 13%; /* Texto principal oscuro */
-    --text-secondary: 0 0% 35%; /* Texto secundario/muted */
-    --text-on-primary-button: 0 0% 98%;
-    --text-on-destructive-button: 0 0% 98%;
+    --text-primary: var(--foreground);
+    --text-secondary: var(--muted-foreground);
+    --text-on-primary-button: var(--primary-foreground);
+    --text-on-destructive-button: var(--destructive-foreground);
 
-    --button-primary-bg: 145 50% 45%; /* Verde para botón "Traducir" */
-    --button-destructive-bg: 0 72% 51%; /* Rojo para botón "Limpiar Historial" */
-
-    /* Variables de ShadCN adaptadas */
-    --background: var(--app-bg); /* Usar el fondo de la app como base */
-    --foreground: var(--text-primary);
-
-    --card: var(--panel-bg);
-    --card-foreground: var(--text-primary);
-
-    --popover: var(--panel-bg);
-    --popover-foreground: var(--text-primary);
-
-    --primary: var(--header-bg); /* El verde oscuro del header como primario general */
-    --primary-foreground: var(--header-fg);
-
-    --secondary: 215 28% 80%; /* Un azul claro desaturado para elementos secundarios */
-    --secondary-foreground: 0 0% 9%;
-
-    --muted: 0 0% 90%; 
-    --muted-foreground: var(--text-secondary);
-
-    --accent: 158 79% 47%; /* Un verde azulado para acentos, puede ajustarse */
-    --accent-foreground: 0 0% 9%;
-
-    --destructive: var(--button-destructive-bg);
-    --destructive-foreground: var(--text-on-destructive-button);
-
-    --border: var(--panel-border); /* Borde principal para componentes ShadCN */
-    --input: 0 0% 93%; 
-    --ring: var(--accent); 
-
-    --radius: 0rem; /* Mantener esquinas rectas */
-
-    --chart-1: 221 83% 53%;
-    --chart-2: 158 79% 47%;
-    --chart-3: 36 90% 55%;
-    --chart-4: 300 76% 60%;
-    --chart-5: 0 63% 50%;
-
-    /* Sidebar variables - pueden no ser usadas directamente en este diseño */
-    --sidebar-background: 0 0% 95%;
-    --sidebar-foreground: 0 0% 9%;
-    --sidebar-primary: 221 83% 53%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 158 79% 47%;
-    --sidebar-accent-foreground: 0 0% 9%;
-    --sidebar-border: 0 0% 85%;
-    --sidebar-ring: 221 83% 53%;
+    --button-primary-bg: var(--primary);
+    --button-destructive-bg: var(--destructive);
   }
 
   .dark {
     /* Mantener tema claro por ahora, se puede definir un tema oscuro después si es necesario */
-    --app-bg: 60 30% 96%;
-    --panel-bg: 0 0% 100%;
-    --panel-border: 0 0% 20%;
-    --header-bg: 145 60% 28%;
-    --header-fg: 0 0% 98%;
-    --text-primary: 0 0% 13%;
-    --text-secondary: 0 0% 35%;
-    --text-on-primary-button: 0 0% 98%;
-    --text-on-destructive-button: 0 0% 98%;
-    --button-primary-bg: 145 50% 45%;
-    --button-destructive-bg: 0 72% 51%;
+    --background: 220 25% 10%; 
+    --foreground: 220 15% 95%; 
 
-    --background: var(--app-bg);
-    --foreground: var(--text-primary);
-    --card: var(--panel-bg);
-    --card-foreground: var(--text-primary);
-    --popover: var(--panel-bg);
-    --popover-foreground: var(--text-primary);
-    --primary: var(--header-bg);
-    --primary-foreground: var(--header-fg);
-    --secondary: 215 28% 80%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 90%;
-    --muted-foreground: var(--text-secondary);
-    --accent: 158 79% 47%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: var(--button-destructive-bg);
-    --destructive-foreground: var(--text-on-destructive-button);
-    --border: var(--panel-border);
-    --input: 0 0% 93%;
-    --ring: var(--accent);
+    --card: 220 20% 15%; 
+    --card-foreground: var(--foreground);
+
+    --popover: var(--card);
+    --popover-foreground: var(--card-foreground);
+
+    --primary: 240 60% 65%; 
+    --primary-foreground: 220 15% 5%; 
+
+    --secondary: 50 70% 65%; 
+    --secondary-foreground: 220 15% 5%;
+
+    --muted: 220 15% 20%; 
+    --muted-foreground: 220 10% 55%;
+
+    --accent: 160 60% 55%; 
+    --accent-foreground: 220 15% 5%;
+
+    --destructive: 0 70% 60%; 
+    --destructive-foreground: 220 15% 5%;
+
+    --border: 220 15% 30%; 
+    --input: 220 20% 20%; 
+    --input-border: 220 15% 25%;
+    --ring: var(--primary);
+
+    /* Variables específicas de la app anterior que se pueden reutilizar o adaptar */
+    --app-bg: var(--background);
+    --panel-bg: var(--card);
+    --panel-border: var(--border);
     
-    --chart-1: 221 83% 53%;
-    --chart-2: 158 79% 47%;
-    --chart-3: 36 90% 55%;
-    --chart-4: 300 76% 60%;
-    --chart-5: 0 63% 50%;
+    --header-bg: var(--primary); 
+    --header-fg: var(--primary-foreground);
+
+    --text-primary: var(--foreground);
+    --text-secondary: var(--muted-foreground);
+    --text-on-primary-button: var(--primary-foreground);
+    --text-on-destructive-button: var(--destructive-foreground);
+
+    --button-primary-bg: var(--primary);
+    --button-destructive-bg: var(--destructive);
   }
 }
 
@@ -126,23 +124,79 @@ body {
   }
 }
 
-/* Estilo para bordes tipo pixel art, si se mantiene */
+/* Estilo para bordes tipo pixel art */
 .pixel-border {
   @apply border-2 border-foreground;
 }
+.pixel-border-primary {
+  @apply border-2 border-primary;
+}
+.pixel-border-accent {
+  @apply border-2 border-accent;
+}
 
-/* Estilos para scrollbar personalizados */
+/* Estilos para scrollbar personalizados estilo pixel */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: hsl(var(--background));
+  background: hsl(var(--muted));
+  border-left: 2px solid hsl(var(--foreground));
+  border-right: 2px solid hsl(var(--foreground));
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted)); 
-  border: 2px solid hsl(var(--background));
+  background: hsl(var(--primary)); 
+  border: 2px solid hsl(var(--foreground));
 }
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--accent));
+}
+::-webkit-scrollbar-button {
+  background-color: hsl(var(--foreground));
+  border: 2px solid hsl(var(--muted));
+  height: 10px;
+  width: 10px;
+}
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
+  display: block;
+}
+::-webkit-scrollbar-button:vertical:start:increment,
+::-webkit-scrollbar-button:vertical:end:decrement {
+  display: none;
+}
+
+
+/* Ajustes específicos para componentes ShadCN para que adopten el estilo pixel */
+.pixel-tabs-list {
+  @apply bg-muted p-1 border-2 border-foreground shadow-pixel-foreground;
+}
+
+.pixel-tabs-trigger {
+  @apply data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-pixel-primary-inset hover:bg-accent/20;
+}
+
+.pixel-card {
+  @apply bg-card border-2 border-foreground shadow-pixel-foreground;
+}
+
+.pixel-input {
+  @apply bg-input border-2 border-input-border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground;
+}
+.pixel-textarea {
+   @apply bg-input border-2 border-input-border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground;
+}
+
+.pixel-button {
+  @apply border-2 border-foreground shadow-pixel-foreground active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-75;
+}
+.pixel-button-primary {
+   @apply bg-primary text-primary-foreground border-2 border-primary-foreground shadow-pixel-primary active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-75;
+}
+.pixel-button-destructive {
+   @apply bg-destructive text-destructive-foreground border-2 border-destructive-foreground shadow-[3px_3px_0px_hsl(var(--foreground))] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-75;
+}
+.pixel-button-ghost {
+  @apply border-2 border-transparent hover:bg-accent/20 hover:border-accent active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all duration-75;
 }

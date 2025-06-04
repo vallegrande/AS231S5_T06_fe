@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, User, Bot } from "lucide-react";
+import { Loader2, Send, User, Bot, CornerDownLeft } from "lucide-react";
 import { chatWithGemini, type ChatWithGeminiInput } from "@/ai/flows/chatWithGemini";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -30,11 +30,12 @@ export function ChatInterface({ onNewQueryResponse, loadQuery, clearLoadedQuery 
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Initialize chat with AI greeting on client side to avoid hydration issues with new Date()
+
   useEffect(() => {
     setChatLog([
-      { id: "0", type: "ai", text: "¡Hola! Soy Gemini, tu asistente virtual. ¿En qué puedo ayudarte hoy?", timestamp: new Date() }
+      { id: "0", type: "ai", text: "¡Hola! Soy Gemini, tu asistente virtual pixelado. ¿En qué puedo ayudarte hoy?", timestamp: new Date() }
     ]);
   }, []);
 
@@ -48,7 +49,8 @@ export function ChatInterface({ onNewQueryResponse, loadQuery, clearLoadedQuery 
   useEffect(() => {
     if (loadQuery) {
       setUserInput(loadQuery.text);
-      clearLoadedQuery(); // Clear after loading to prevent re-loading on re-renders
+      textAreaRef.current?.focus();
+      clearLoadedQuery(); 
     }
   }, [loadQuery, clearLoadedQuery]);
 
@@ -60,60 +62,66 @@ export function ChatInterface({ onNewQueryResponse, loadQuery, clearLoadedQuery 
     const userMessage: ChatEntry = { id: Date.now().toString(), type: "user", text: userInput, timestamp: new Date() };
     setChatLog(prevLog => [...prevLog, userMessage]);
     setIsLoading(true);
+    const currentInput = userInput;
     setUserInput("");
 
     try {
-      const input: ChatWithGeminiInput = { message: userMessage.text };
+      const input: ChatWithGeminiInput = { message: currentInput };
       const result = await chatWithGemini(input);
       const aiMessage: ChatEntry = { id: (Date.now()+1).toString(), type: "ai", text: result.reply, timestamp: new Date() };
       setChatLog(prevLog => [...prevLog, aiMessage]);
-      onNewQueryResponse(userMessage.text, result.reply);
+      onNewQueryResponse(currentInput, result.reply);
     } catch (error) {
       console.error("Error en chat con Gemini:", error);
-      const errorMessage: ChatEntry = {id: (Date.now()+1).toString(), type: "ai", text: "Lo siento, ocurrió un error al procesar tu solicitud.", timestamp: new Date() };
+      const errorMessage: ChatEntry = {id: (Date.now()+1).toString(), type: "ai", text: "Lo siento, ocurrió un error al procesar tu solicitud pixelada.", timestamp: new Date() };
       setChatLog(prevLog => [...prevLog, errorMessage]);
       toast({
-        title: "Error de Comunicación",
+        title: "Error de Comunicación 👾",
         description: (error as Error).message || "No se pudo obtener respuesta de la IA.",
         variant: "destructive",
       });
     } finally {
       setIsLoading(false);
+      textAreaRef.current?.focus();
     }
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-card">
       <ScrollArea className="flex-grow p-3 space-y-3" ref={scrollAreaRef}>
         {chatLog.map((entry) => (
           <div
             key={entry.id}
             className={cn(
-              "flex items-start gap-2 p-2 rounded-md text-sm max-w-[85%]",
-              entry.type === "user" ? "ml-auto bg-blue-100 text-blue-800" : "mr-auto bg-gray-100 text-gray-800"
+              "flex items-start gap-2 p-2.5 text-sm max-w-[85%] pixel-border mb-2 shadow-pixel-foreground/50",
+              entry.type === "user" ? "ml-auto bg-blue-500/20 border-blue-500 text-foreground" : "mr-auto bg-green-500/20 border-green-500 text-foreground"
             )}
           >
-            {entry.type === 'ai' ? <Bot className="w-5 h-5 text-gray-600 mt-0.5" /> : <User className="w-5 h-5 text-blue-600 mt-0.5" />}
+            {entry.type === 'ai' ? 
+              <Bot className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" /> : 
+              <User className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />}
             <div className="flex flex-col">
-              <p className="whitespace-pre-wrap">{entry.text}</p>
-              <ClientTimestamp date={entry.timestamp} />
+              <p className="whitespace-pre-wrap font-code">{entry.text}</p>
+              <ClientTimestamp date={entry.timestamp} className="text-xs text-muted-foreground self-end mt-1"/>
             </div>
           </div>
         ))}
         {isLoading && (
-          <div className="flex items-start gap-2 p-2 rounded-md text-sm max-w-[85%] mr-auto bg-gray-100 text-gray-800">
-            <Bot className="w-5 h-5 text-gray-600 mt-0.5" />
-            <Loader2 className="w-5 h-5 animate-spin text-gray-600" /> 
+          <div className="flex items-start gap-2 p-2.5 pixel-border border-accent bg-accent/20 text-sm max-w-[85%] mr-auto text-foreground">
+            <Bot className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
+            <Loader2 className="w-5 h-5 animate-spin text-accent" /> 
+            <p className="font-code">Pensando...</p>
           </div>
         )}
       </ScrollArea>
-      <form onSubmit={handleSubmit} className="p-3 border-t border-panel-border flex items-center gap-2 bg-panel-bg">
+      <form onSubmit={handleSubmit} className="p-3 border-t-2 border-foreground flex items-center gap-2 bg-muted">
         <Textarea
+          ref={textAreaRef}
           placeholder="Escribe tu consulta aquí..."
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
           rows={2}
-          className="flex-grow resize-none border-panel-border focus:ring-accent bg-white"
+          className="flex-grow resize-none pixel-input focus:border-accent focus:ring-accent"
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
@@ -121,7 +129,7 @@ export function ChatInterface({ onNewQueryResponse, loadQuery, clearLoadedQuery 
             }
           }}
         />
-        <Button type="submit" disabled={isLoading || !userInput.trim()} className="bg-header-bg hover:bg-header-bg/90 text-header-fg px-3 py-2 h-auto">
+        <Button type="submit" disabled={isLoading || !userInput.trim()} className="pixel-button-primary px-3 py-2 h-auto">
           {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
           <span className="sr-only">Enviar</span>
         </Button>
