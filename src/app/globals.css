@@ -48,7 +48,6 @@ body {
     --text-on-destructive-button: var(--destructive-foreground);
     --button-primary-bg: var(--primary);
     --button-destructive-bg: var(--destructive);
-    /* --pixel-art-character-bg: url('https://placehold.co/64x64.png'); Eliminado para usar CSS puro */
   }
 
   .dark {
@@ -83,6 +82,9 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    /* Establecer contexto de apilamiento para que body::after funcione correctamente con z-index: -1 */
+    position: relative;
+    z-index: 0;
     /* Fondo de pixel art con CSS */
     background-color: hsl(var(--muted)); /* Color base */
     background-image:
@@ -96,6 +98,31 @@ body {
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-crisp-edges;
   }
+
+  body::after {
+    content: "";
+    position: fixed;
+    bottom: 20px; /* Ajusta el espaciado desde abajo */
+    right: 20px;  /* Ajusta el espaciado desde la derecha */
+    width: 128px;  /* Ancho deseado para BMO (tamaño mediano) */
+    height: 160px; /* Alto deseado para BMO (tamaño mediano) */
+    /* 
+      IMPORTANTE: Reemplaza la URL de placeholder por la URL de tu imagen de BMO.
+      Puedes subirla a un servicio de hosting o ponerla en tu carpeta `public`.
+      Ej: si está en public/bmo.png, usa url('/bmo.png').
+      Pista para búsqueda de imagen AI: BMO adventure time
+    */
+    background-image: url('https://placehold.co/128x160.png'); 
+    background-size: contain; /* Asegura que toda la imagen quepa, manteniendo la proporción */
+    background-repeat: no-repeat;
+    background-position: center; /* Centra la imagen dentro del pseudo-elemento */
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    z-index: -1; /* Se coloca detrás del contenido principal, pero encima del fondo base del body */
+    pointer-events: none; /* Para que no interfiera con clics u otros eventos */
+  }
+
   input, button, textarea, select {
     font-family: inherit;
   }
@@ -236,5 +263,3 @@ body {
   0% { opacity: 0; }
   100% { opacity: 1; }
 }
-
-    
