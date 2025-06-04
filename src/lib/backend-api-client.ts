@@ -48,14 +48,28 @@ async function fetchWithErrorHandling<T>(url: string, options?: RequestInit): Pr
 
   } catch (error: any) {
     let detailedErrorMessage = `Failed to fetch from ${url}.`;
-    if (error instanceof TypeError) { // Often network errors, CORS
-        detailedErrorMessage += ` This might be a network issue or a CORS problem. Original error: ${error.message}`;
+    if (error instanceof TypeError && error.message === "Failed to fetch") { // Specifically for this common error
+        detailedErrorMessage += ` This usually means the backend server at ${BASE_URL} is not reachable or a CORS policy is blocking the request.`;
+        detailedErrorMessage += `\n\nTroubleshooting steps:`;
+        detailedErrorMessage += `\n1. Verify your backend server (and ngrok, if used) is running correctly.`;
+        detailedErrorMessage += `\n2. Check the backend server's console for any errors.`;
+        detailedErrorMessage += `\n3. Ensure the URL '${BASE_URL}' in your .env file is correct and accessible from your browser/environment.`;
+        detailedErrorMessage += `\n4. MOST IMPORTANTLY: Check your browser's Network Tab for this failed request. Look for 'CORS error' messages or if the request status is 'failed'.`;
+        detailedErrorMessage += `\n5. Your backend MUST have CORS configured to allow requests from this frontend's origin.`;
     } else if (error.message) {
         detailedErrorMessage += ` Error: ${error.message}`;
     }
-    console.error(`API call failed: ${url}. Full error object:`, error, "Error cause:", error.cause);
-    // For CORS issues, often the 'error' object itself is a simple TypeError, check network tab for more.
-    alert(`Frontend Error: ${detailedErrorMessage}\n\nCheck the browser console and network tab for more details. Ensure the backend is running and accessible at ${BASE_URL} and CORS is configured.`);
+    
+    console.error("---------------------------------------------------------------------");
+    console.error(`API Call Failed: ${url}`);
+    console.error(`Full error message: ${detailedErrorMessage}`);
+    console.error("Error object:", error);
+    if (error.cause) {
+      console.error("Error cause:", error.cause);
+    }
+    console.error("---------------------------------------------------------------------");
+    
+    alert(`Frontend Error: ${detailedErrorMessage}\n\nPlease check your browser's developer console (Network and Console tabs) for more details. The most common causes are the backend server not running, the ngrok URL being incorrect/expired, or a CORS misconfiguration on the backend.`);
     throw new Error(detailedErrorMessage, { cause: error });
   }
 }
