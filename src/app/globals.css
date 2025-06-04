@@ -82,17 +82,15 @@ body {
   }
   body {
     @apply bg-background text-foreground;
-    /* Establecer contexto de apilamiento para que body::after funcione correctamente con z-index: -1 */
     position: relative;
     z-index: 0;
-    /* Fondo de pixel art con CSS */
-    background-color: hsl(var(--muted)); /* Color base */
+    background-color: hsl(var(--muted)); 
     background-image:
       linear-gradient(45deg, hsl(var(--background)) 25%, transparent 25%),
       linear-gradient(-45deg, hsl(var(--background)) 25%, transparent 25%),
       linear-gradient(45deg, transparent 75%, hsl(var(--background)) 75%),
       linear-gradient(-45deg, transparent 75%, hsl(var(--background)) 75%);
-    background-size: 32px 32px; /* Tamaño de los "píxeles" del patrón */
+    background-size: 32px 32px; 
     background-position: 0 0, 0 16px, 16px -16px, -16px 0px;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
@@ -102,25 +100,51 @@ body {
   body::after {
     content: "";
     position: fixed;
-    bottom: 20px; /* Ajusta el espaciado desde abajo */
-    right: 20px;  /* Ajusta el espaciado desde la derecha */
-    width: 256px;  /* Ancho deseado para BMO (tamaño grande) */
-    height: 320px; /* Alto deseado para BMO (tamaño grande) */
-    /*
-      IMPORTANTE: Reemplaza la URL de placeholder por la URL de tu imagen de BMO (256x320px).
-      Puedes subirla a un servicio de hosting o ponerla en tu carpeta `public`.
-      Ej: si está en public/bmo.png, usa url('/bmo.png').
-      Pista para búsqueda de imagen AI: BMO adventure time
-    */
-    background-image: url('https://placehold.co/256x320.png');
-    background-size: contain; /* Asegura que toda la imagen quepa, manteniendo la proporción */
+    bottom: 20px;
+    right: 20px;
+    width: 256px; /* Double the previous 128px */
+    height: 320px; /* Double the previous 160px */
+    background-color: transparent; /* Ensure no base color interferes */
+
+    /* BMO Colors */
+    --bmo-body: hsl(175, 55%, 50%);
+    --bmo-body-dark: hsl(175, 55%, 35%); /* For outline/bevel */
+    --bmo-screen: hsl(0, 0%, 10%);
+    --bmo-button-red: hsl(0, 70%, 50%);
+    --bmo-button-yellow: hsl(50, 100%, 60%);
+    --bmo-button-blue: hsl(210, 70%, 50%);
+    --bmo-button-green: hsl(120, 60%, 45%); /* Small green button */
+
+    background-image:
+      /* Top layer: Small Green LED-like button */
+      radial-gradient(circle at 85% 15%, var(--bmo-button-green) 4px, transparent 4.5px),
+
+      /* Red Button (Circle) */
+      radial-gradient(circle at 78% 68%, var(--bmo-button-red) 18px, transparent 18.5px),
+      /* Yellow Button (Circle) */
+      radial-gradient(circle at 62% 78%, var(--bmo-button-yellow) 14px, transparent 14.5px),
+
+      /* D-Pad (Blue cross) */
+      /* Horizontal part of D-pad */
+      linear-gradient(var(--bmo-button-blue), var(--bmo-button-blue)) 20% 70% / 20% 6%, /* x-pos y-pos / width height */
+      /* Vertical part of D-pad */
+      linear-gradient(var(--bmo-button-blue), var(--bmo-button-blue)) 20% 70% / 6% 20%, /* x-pos y-pos / width height */
+
+      /* Screen (Black) */
+      linear-gradient(var(--bmo-screen), var(--bmo-screen)) 50% 38% / 70% 45%, /* x-pos y-pos / width height */
+
+      /* Main Body (Teal) - slightly inset to reveal the darker body as outline */
+      linear-gradient(var(--bmo-body), var(--bmo-body)) 50% 50% / calc(100% - 10px) calc(100% - 10px), /* x-pos y-pos / width height */
+
+      /* Base Body Outline (Darker Teal) - covers the whole area */
+      linear-gradient(var(--bmo-body-dark), var(--bmo-body-dark)) 50% 50% / 100% 100%; /* x-pos y-pos / width height */
+
     background-repeat: no-repeat;
-    background-position: center; /* Centra la imagen dentro del pseudo-elemento */
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-crisp-edges;
-    z-index: -1; /* Se coloca detrás del contenido principal, pero encima del fondo base del body */
-    pointer-events: none; /* Para que no interfiera con clics u otros eventos */
+    z-index: -1; /* Behind content */
+    pointer-events: none; /* Not interactive */
   }
 
   input, button, textarea, select {
@@ -222,7 +246,7 @@ body {
 }
 .pixel-button-ghost {
   @apply border-2 border-transparent hover:bg-accent/20 active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all duration-75 hover:animate-pixel-jump;
-  @apply hover:border-2 hover:border-[hsl(var(--accent-shadow-color))] hover:shadow-[3px_3px_0px_hsl(var(--accent-shadow-color))];
+  @apply hover:border-2 hover:border-[hsl(var(--accent-shadow-color))] hover:shadow-[2px_2px_0px_hsl(var(--accent-shadow-color))];
 }
 
 .animate-text-pop-in {
