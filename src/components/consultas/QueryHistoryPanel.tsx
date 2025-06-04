@@ -60,11 +60,11 @@ export function QueryHistoryPanel({
                   item.deleted && "line-through"
                 )}
                 onClick={() => onLoadQuery(item)}
-                title={`Cargar consulta: ${item.prompt.substring(0,50)}...`}
+                title={`Cargar consulta: ${(item.prompt || '').substring(0,50)}...`}
               >
                 <div className="flex items-center w-full">
                     <MessageSquareDashed className="w-4 h-4 mr-2 flex-shrink-0" />
-                    <span className="truncate text-sm font-code">{item.prompt}</span>
+                    <span className="truncate text-sm font-code">{item.prompt || "Sin prompt"}</span>
                 </div>
                 <ClientTimestamp date={new Date(item.timestamp)} className="text-xs text-muted-foreground/80 self-start ml-6" />
 

@@ -74,7 +74,7 @@ export function TranslationHistoryPanel({
               <div className="flex justify-between items-start mb-1.5">
                 <div className={cn(record.deleted && "line-through")}>
                   <span className="font-medium text-accent flex items-center">
-                    {record.sourceLanguage.toUpperCase()} <ArrowRightToLine className="inline w-3.5 h-3.5 mx-1.5 text-muted-foreground" /> {record.targetLanguage.toUpperCase()}
+                    {(record.sourceLanguage || 'N/A').toUpperCase()} <ArrowRightToLine className="inline w-3.5 h-3.5 mx-1.5 text-muted-foreground" /> {(record.targetLanguage || 'N/A').toUpperCase()}
                   </span>
                   <ClientTimestamp date={new Date(record.createdAt)} className="text-muted-foreground text-xs" />
                 </div>
@@ -104,10 +104,10 @@ export function TranslationHistoryPanel({
               </div>
               <div className={cn("space-y-1", record.deleted && "line-through")}>
                 <p className="text-text-primary break-words">
-                  <strong className="text-muted-foreground">Original:</strong> {record.sourceText.substring(0, 70)}{record.sourceText.length > 70 ? "..." : ""}
+                  <strong className="text-muted-foreground">Original:</strong> {(record.sourceText || '').substring(0, 70)}{(record.sourceText || '').length > 70 ? "..." : ""}
                 </p>
                 <p className="text-primary break-words">
-                  <strong className="text-muted-foreground">Traducción:</strong> {record.translatedText.substring(0, 70)}{record.translatedText.length > 70 ? "..." : ""}
+                  <strong className="text-muted-foreground">Traducción:</strong> {(record.translatedText || '').substring(0, 70)}{(record.translatedText || '').length > 70 ? "..." : ""}
                 </p>
               </div>
             </div>
