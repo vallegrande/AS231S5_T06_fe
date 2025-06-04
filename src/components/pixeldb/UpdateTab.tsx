@@ -50,21 +50,21 @@ export function UpdateTab({ recordIdToUpdate, onRecordUpdated, clearRecordIdToUp
         queryClient.invalidateQueries({ queryKey: ['allPixelRecords'] });
         queryClient.invalidateQueries({ queryKey: ['pixelRecord', updatedRecord.id] });
         toast({
-          title: 'Record Updated! 💾',
-          description: `"${updatedRecord.name}" has been successfully updated.`,
+          title: '¡Registro Actualizado! 💾',
+          description: `"${updatedRecord.name}" ha sido actualizado correctamente.`,
         });
         onRecordUpdated();
-        clearRecordIdToUpdate(); // Clear the ID from parent after successful update
-        setCurrentRecordId(null); // Clear local state
+        clearRecordIdToUpdate(); 
+        setCurrentRecordId(null); 
         setIdInput("");
       } else {
-         toast({ title: 'Update Failed', description: 'Record not found or an error occurred.', variant: 'destructive' });
+         toast({ title: 'Actualización Fallida', description: 'Registro no encontrado o ocurrió un error.', variant: 'destructive' });
       }
     },
     onError: (error) => {
       toast({
-        title: 'Update Failed 😢',
-        description: error.message || 'Could not update the record.',
+        title: 'Actualización Fallida 😢',
+        description: error.message || 'No se pudo actualizar el registro.',
         variant: 'destructive',
       });
     },
@@ -75,7 +75,7 @@ export function UpdateTab({ recordIdToUpdate, onRecordUpdated, clearRecordIdToUp
     if (idInput.trim()) {
       setCurrentRecordId(idInput.trim());
     } else {
-      toast({ title: "Missing ID", description: "Please enter a record ID to fetch.", variant: "destructive" });
+      toast({ title: "ID Faltante", description: "Por favor, introduce un ID de registro para buscar.", variant: "destructive" });
     }
   };
 
@@ -87,28 +87,29 @@ export function UpdateTab({ recordIdToUpdate, onRecordUpdated, clearRecordIdToUp
   };
 
   if (fetchError) {
-     toast({ title: 'Error Fetching Record', description: fetchError.message, variant: 'destructive' });
+     // toast({ title: 'Error al Buscar Registro', description: fetchError.message, variant: 'destructive' });
+     console.error("Fetch error:", fetchError.message);
   }
   
   return (
     <div className="p-4 md:p-6 space-y-6">
       <Card className="pixel-border bg-card shadow-pixel-foreground">
         <CardHeader>
-          <CardTitle className="text-primary font-headline">Update Pixel Record</CardTitle>
-          <CardDescription>Enter the ID of the record you want to update.</CardDescription>
+          <CardTitle className="text-primary font-headline">Actualizar Registro Pixel</CardTitle>
+          <CardDescription>Introduce el ID del registro que quieres actualizar.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleFetchRecord} className="flex gap-2 items-center mb-6">
             <Input
-              placeholder="Enter Record ID"
+              placeholder="Introduce ID del Registro"
               value={idInput}
               onChange={(e) => setIdInput(e.target.value)}
               className="flex-grow pixel-border bg-input text-foreground focus:border-accent focus:ring-accent"
-              aria-label="Record ID to update"
+              aria-label="ID del registro a actualizar"
             />
             <Button type="submit" disabled={isLoadingRecord || !idInput} className="bg-accent text-accent-foreground hover:bg-accent/90 pixel-border border-accent-foreground shadow-pixel-accent active:translate-x-[2px] active:translate-y-[2px] active:shadow-none">
               {isLoadingRecord ? <Loader2 className="h-5 w-5 animate-spin" /> : <PixelSearchIcon className="h-5 w-5" />}
-               <span className="ml-2 hidden sm:inline">Fetch Record</span>
+               <span className="ml-2 hidden sm:inline">Buscar Registro</span>
             </Button>
           </form>
         </CardContent>
@@ -117,7 +118,7 @@ export function UpdateTab({ recordIdToUpdate, onRecordUpdated, clearRecordIdToUp
       {isLoadingRecord && currentRecordId && (
         <div className="flex justify-center items-center p-10">
           <Loader2 className="h-12 w-12 animate-spin text-primary" />
-           <p className="ml-4 text-lg font-headline">Fetching Record...</p>
+           <p className="ml-4 text-lg font-headline">Buscando Registro...</p>
         </div>
       )}
 
@@ -126,12 +127,15 @@ export function UpdateTab({ recordIdToUpdate, onRecordUpdated, clearRecordIdToUp
           onSubmit={handleSubmit}
           defaultValues={recordToUpdate}
           isSubmitting={mutation.isPending}
-          submitButtonText="Update Pixel Record"
+          submitButtonText="Actualizar Registro Pixel"
         />
       )}
 
-      {!isLoadingRecord && currentRecordId && !recordToUpdate && (
-        <p className="p-4 text-center text-muted-foreground pixel-border bg-card shadow-pixel-foreground">Record with ID "{currentRecordId}" not found or could not be fetched.</p>
+      {!isLoadingRecord && currentRecordId && !recordToUpdate && !fetchError && (
+        <p className="p-4 text-center text-muted-foreground pixel-border bg-card shadow-pixel-foreground">Registro con ID "{currentRecordId}" no encontrado.</p>
+      )}
+      {fetchError && (
+         <p className="p-4 text-center text-destructive pixel-border bg-card shadow-pixel-foreground">Error al buscar el registro: {fetchError.message}</p>
       )}
     </div>
   );

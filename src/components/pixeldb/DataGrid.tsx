@@ -29,7 +29,7 @@ interface DataGridProps {
 
 export function DataGrid({ records, caption, onEdit, onDelete, onRestore, showInactive = false }: DataGridProps) {
   if (!records || records.length === 0) {
-    return <p className="p-4 text-center text-muted-foreground">No records found.</p>;
+    return <p className="p-4 text-center text-muted-foreground">No se encontraron registros.</p>;
   }
 
   const getStatusVariant = (isActive: boolean) => {
@@ -37,7 +37,8 @@ export function DataGrid({ records, caption, onEdit, onDelete, onRestore, showIn
   };
   
   const getStatusClass = (isActive: boolean) => {
-    return isActive ? "bg-green-500/20 text-green-300 border-green-500" : "bg-red-500/20 text-red-300 border-red-500";
+    // Using Tailwind classes directly for more control over light theme colors
+    return isActive ? "bg-green-100 text-green-700 border-green-300" : "bg-red-100 text-red-700 border-red-300";
   }
 
 
@@ -47,22 +48,22 @@ export function DataGrid({ records, caption, onEdit, onDelete, onRestore, showIn
         {caption && <TableCaption className="py-2 text-base">{caption}</TableCaption>}
         <TableHeader className="bg-muted/30">
           <TableRow className="border-b-2 border-border">
-            {showInactive && <TableHead className="w-[100px] pixel-border text-foreground">Status</TableHead>}
-            <TableHead className="pixel-border text-foreground">Image</TableHead>
-            <TableHead className="pixel-border text-foreground">Name</TableHead>
-            <TableHead className="pixel-border text-foreground hidden md:table-cell">Description</TableHead>
-            <TableHead className="pixel-border text-foreground hidden lg:table-cell">Category</TableHead>
-            <TableHead className="pixel-border text-foreground hidden lg:table-cell">Tags</TableHead>
-            <TableHead className="pixel-border text-foreground text-right">Actions</TableHead>
+            {showInactive && <TableHead className="w-[100px] pixel-border text-foreground">Estado</TableHead>}
+            <TableHead className="pixel-border text-foreground">Imagen</TableHead>
+            <TableHead className="pixel-border text-foreground">Nombre</TableHead>
+            <TableHead className="pixel-border text-foreground hidden md:table-cell">Descripción</TableHead>
+            <TableHead className="pixel-border text-foreground hidden lg:table-cell">Categoría</TableHead>
+            <TableHead className="pixel-border text-foreground hidden lg:table-cell">Etiquetas</TableHead>
+            <TableHead className="pixel-border text-foreground text-right">Acciones</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {records.map((record) => (
-            <TableRow key={record.id} className={cn("border-b border-border hover:bg-muted/20", !record.isActive && "opacity-60")}>
+            <TableRow key={record.id} className={cn("border-b border-border hover:bg-muted/50", !record.isActive && "opacity-60")}>
               {showInactive && (
                 <TableCell className="pixel-border">
                    <Badge variant={getStatusVariant(record.isActive)} className={cn("text-xs font-headline", getStatusClass(record.isActive))}>
-                    {record.isActive ? 'Active' : 'Inactive'}
+                    {record.isActive ? 'Activo' : 'Inactivo'}
                   </Badge>
                 </TableCell>
               )}
@@ -77,15 +78,15 @@ export function DataGrid({ records, caption, onEdit, onDelete, onRestore, showIn
                     data-ai-hint="pixel art item"
                   />
                 ) : (
-                  <div className="w-12 h-12 bg-muted flex items-center justify-center text-muted-foreground text-xs border-2 border-muted-foreground">No Img</div>
+                  <div className="w-12 h-12 bg-muted flex items-center justify-center text-muted-foreground text-xs border-2 border-muted-foreground">Sin Img</div>
                 )}
               </TableCell>
-              <TableCell className="font-medium pixel-border text-primary-foreground">{record.name}</TableCell>
+              <TableCell className="font-medium pixel-border text-foreground">{record.name}</TableCell>
               <TableCell className="pixel-border hidden md:table-cell max-w-xs truncate">{record.description}</TableCell>
               <TableCell className="pixel-border hidden lg:table-cell">{record.category}</TableCell>
               <TableCell className="pixel-border hidden lg:table-cell">
                 <div className="flex flex-wrap gap-1">
-                  {record.tags.map(tag => <Badge key={tag} variant="secondary" className="bg-secondary/50 text-secondary-foreground text-xs">{tag}</Badge>)}
+                  {record.tags.map(tag => <Badge key={tag} variant="secondary" className="bg-secondary/80 text-secondary-foreground text-xs">{tag}</Badge>)}
                 </div>
               </TableCell>
               <TableCell className="text-right pixel-border">
@@ -93,19 +94,19 @@ export function DataGrid({ records, caption, onEdit, onDelete, onRestore, showIn
                   {onEdit && record.isActive && (
                     <Button variant="outline" size="sm" onClick={() => onEdit(record.id)} className="pixel-border border-accent text-accent hover:bg-accent hover:text-accent-foreground p-2">
                       <PixelEditIcon className="w-4 h-4" />
-                      <span className="sr-only">Edit</span>
+                      <span className="sr-only">Editar</span>
                     </Button>
                   )}
                   {record.isActive && onDelete && (
                     <Button variant="outline" size="sm" onClick={() => onDelete(record.id)} className="pixel-border border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground p-2">
                       <PixelTrashIcon className="w-4 h-4" />
-                       <span className="sr-only">Delete</span>
+                       <span className="sr-only">Eliminar</span>
                     </Button>
                   )}
                   {!record.isActive && onRestore && (
-                     <Button variant="outline" size="sm" onClick={() => onRestore(record.id)} className="pixel-border border-green-500 text-green-500 hover:bg-green-500 hover:text-white p-2">
+                     <Button variant="outline" size="sm" onClick={() => onRestore(record.id)} className="pixel-border border-green-500 text-green-600 hover:bg-green-500 hover:text-white p-2">
                       <PixelRestoreIcon className="w-4 h-4" />
-                       <span className="sr-only">Restore</span>
+                       <span className="sr-only">Restaurar</span>
                     </Button>
                   )}
                 </div>

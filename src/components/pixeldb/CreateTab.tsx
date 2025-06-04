@@ -20,15 +20,15 @@ export function CreateTab({ onRecordCreated }: CreateTabProps) {
       queryClient.invalidateQueries({ queryKey: ['pixelRecords'] });
       queryClient.invalidateQueries({ queryKey: ['allPixelRecords'] });
       toast({
-        title: 'Record Created! ✨',
-        description: `"${newRecord.name}" has been added to the database.`,
+        title: '¡Registro Creado! ✨',
+        description: `"${newRecord.name}" ha sido añadido a la base de datos.`,
       });
-      onRecordCreated(); // Potentially switch tab or clear form
+      onRecordCreated();
     },
     onError: (error) => {
       toast({
-        title: 'Creation Failed 😢',
-        description: error.message || 'Could not create the record.',
+        title: 'Creación Fallida 😢',
+        description: error.message || 'No se pudo crear el registro.',
         variant: 'destructive',
       });
     },
@@ -45,7 +45,7 @@ export function CreateTab({ onRecordCreated }: CreateTabProps) {
       <RecordForm
         onSubmit={handleSubmit}
         isSubmitting={mutation.isPending}
-        submitButtonText="Create Pixel Record"
+        submitButtonText="Crear Registro Pixel"
       />
     </div>
   );

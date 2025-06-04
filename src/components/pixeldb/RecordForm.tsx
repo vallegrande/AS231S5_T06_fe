@@ -24,13 +24,13 @@ import { PixelTranslateIcon } from "../icons/PixelTranslateIcon";
 import { Loader2 } from "lucide-react";
 
 export const recordSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters").max(50, "Name must be 50 characters or less"),
-  description: z.string().min(5, "Description must be at least 5 characters").max(500, "Description must be 500 chars or less"),
-  category: z.string().min(2, "Category must be at least 2 characters").max(30, "Category must be 30 chars or less"),
+  name: z.string().min(2, "El nombre debe tener al menos 2 caracteres").max(50, "El nombre debe tener 50 caracteres o menos"),
+  description: z.string().min(5, "La descripción debe tener al menos 5 caracteres").max(500, "La descripción debe tener 500 caracteres o menos"),
+  category: z.string().min(2, "La categoría debe tener al menos 2 caracteres").max(30, "La categoría debe tener 30 caracteres o menos"),
   tags: z.string().refine(val => val.split(',').map(t => t.trim()).filter(t => t).length > 0, {
-    message: "At least one tag is required. Separate tags with commas.",
+    message: "Se requiere al menos una etiqueta. Separa las etiquetas con comas.",
   }),
-  imageUrl: z.string().url("Must be a valid URL (e.g., https://placehold.co/100x100.png)").optional().or(z.literal("")),
+  imageUrl: z.string().url("Debe ser una URL válida (ej: https://placehold.co/100x100.png)").optional().or(z.literal("")),
 });
 
 export type RecordFormData = z.infer<typeof recordSchema>;
@@ -42,7 +42,7 @@ interface RecordFormProps {
   submitButtonText?: string;
 }
 
-export function RecordForm({ onSubmit, defaultValues, isSubmitting = false, submitButtonText = "Submit" }: RecordFormProps) {
+export function RecordForm({ onSubmit, defaultValues, isSubmitting = false, submitButtonText = "Enviar" }: RecordFormProps) {
   const { toast } = useToast();
   const [isTranslating, setIsTranslating] = useState(false);
 
@@ -60,22 +60,23 @@ export function RecordForm({ onSubmit, defaultValues, isSubmitting = false, subm
   const handleSuggestTranslation = async () => {
     const description = form.getValues("description");
     if (!description) {
-      toast({ title: "Cannot Translate", description: "Description field is empty.", variant: "destructive" });
+      toast({ title: "No se Puede Traducir", description: "El campo de descripción está vacío.", variant: "destructive" });
       return;
     }
     setIsTranslating(true);
     try {
-      const input: SuggestTranslationInput = { text: description, targetLanguage: "Spanish" }; // Example target language
+      // Translating Spanish description to English
+      const input: SuggestTranslationInput = { text: description, targetLanguage: "English" }; 
       const result = await suggestTranslation(input);
       if (result.translatedText) {
         form.setValue("description", result.translatedText);
-        toast({ title: "Translation Suggested", description: "Description updated with Spanish translation." });
+        toast({ title: "Traducción Sugerida", description: "Descripción actualizada con traducción al Inglés." });
       } else {
-        toast({ title: "Translation Failed", description: "Could not get translation.", variant: "destructive" });
+        toast({ title: "Traducción Fallida", description: "No se pudo obtener la traducción.", variant: "destructive" });
       }
     } catch (error) {
       console.error("Translation error:", error);
-      toast({ title: "Translation Error", description: "An error occurred during translation.", variant: "destructive" });
+      toast({ title: "Error de Traducción", description: "Ocurrió un error durante la traducción.", variant: "destructive" });
     } finally {
       setIsTranslating(false);
     }
@@ -85,7 +86,7 @@ export function RecordForm({ onSubmit, defaultValues, isSubmitting = false, subm
   return (
     <Card className="pixel-border bg-card shadow-pixel-foreground">
       <CardHeader>
-        <CardTitle className="text-primary font-headline">{submitButtonText === "Submit" ? "Create New Record" : "Update Record"}</CardTitle>
+        <CardTitle className="text-primary font-headline">{submitButtonText === "Crear Registro Pixel" ? "Crear Nuevo Registro" : (submitButtonText === "Actualizar Registro Pixel" ? "Actualizar Registro" : submitButtonText)}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -95,9 +96,9 @@ export function RecordForm({ onSubmit, defaultValues, isSubmitting = false, subm
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground/80">Name</FormLabel>
+                  <FormLabel className="text-foreground/80">Nombre</FormLabel>
                   <FormControl>
-                    <Input placeholder="Pixel Sword" {...field} className="pixel-border bg-input text-foreground focus:border-primary focus:ring-primary" />
+                    <Input placeholder="Espada Pixel" {...field} className="pixel-border bg-input text-foreground focus:border-primary focus:ring-primary" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -108,10 +109,10 @@ export function RecordForm({ onSubmit, defaultValues, isSubmitting = false, subm
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground/80">Description</FormLabel>
+                  <FormLabel className="text-foreground/80">Descripción</FormLabel>
                   <div className="relative">
                     <FormControl>
-                      <Textarea placeholder="A legendary weapon..." {...field} rows={4} className="pixel-border bg-input text-foreground focus:border-primary focus:ring-primary pr-12" />
+                      <Textarea placeholder="Un arma legendaria..." {...field} rows={4} className="pixel-border bg-input text-foreground focus:border-primary focus:ring-primary pr-12" />
                     </FormControl>
                     <Button
                       type="button"
@@ -120,12 +121,12 @@ export function RecordForm({ onSubmit, defaultValues, isSubmitting = false, subm
                       onClick={handleSuggestTranslation}
                       disabled={isTranslating}
                       className="absolute top-2 right-2 p-1 h-8 w-8 text-accent hover:text-accent hover:bg-accent/20"
-                      title="Suggest Spanish Translation"
+                      title="Sugerir Traducción al Inglés"
                     >
                       {isTranslating ? <Loader2 className="h-4 w-4 animate-spin" /> : <PixelTranslateIcon className="h-5 w-5" />}
                     </Button>
                   </div>
-                  <FormDescription>Describe the item. You can use AI to suggest a translation.</FormDescription>
+                  <FormDescription>Describe el objeto. Puedes usar IA para sugerir una traducción al inglés.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -136,9 +137,9 @@ export function RecordForm({ onSubmit, defaultValues, isSubmitting = false, subm
                 name="category"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-foreground/80">Category</FormLabel>
+                    <FormLabel className="text-foreground/80">Categoría</FormLabel>
                     <FormControl>
-                      <Input placeholder="Weapon" {...field} className="pixel-border bg-input text-foreground focus:border-primary focus:ring-primary" />
+                      <Input placeholder="Arma" {...field} className="pixel-border bg-input text-foreground focus:border-primary focus:ring-primary" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -149,9 +150,9 @@ export function RecordForm({ onSubmit, defaultValues, isSubmitting = false, subm
                 name="tags"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-foreground/80">Tags (comma-separated)</FormLabel>
+                    <FormLabel className="text-foreground/80">Etiquetas (separadas por coma)</FormLabel>
                     <FormControl>
-                      <Input placeholder="melee, sharp, retro" {...field} className="pixel-border bg-input text-foreground focus:border-primary focus:ring-primary" />
+                      <Input placeholder="cuerpo a cuerpo, afilado, retro" {...field} className="pixel-border bg-input text-foreground focus:border-primary focus:ring-primary" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -163,11 +164,11 @@ export function RecordForm({ onSubmit, defaultValues, isSubmitting = false, subm
               name="imageUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground/80">Image URL</FormLabel>
+                  <FormLabel className="text-foreground/80">URL de Imagen</FormLabel>
                   <FormControl>
                     <Input placeholder="https://placehold.co/100x100.png" {...field} className="pixel-border bg-input text-foreground focus:border-primary focus:ring-primary" />
                   </FormControl>
-                  <FormDescription>URL for the item's pixel art image.</FormDescription>
+                  <FormDescription>URL para la imagen pixel art del objeto.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

@@ -30,15 +30,14 @@ export default function PixelDBExplorerPage() {
   };
   
   const handleRestoreRecord = (id: string) => {
-    setRecordIdToDelete(id); // Use the same mechanism for ID passing
-    setActiveTab("delete"); // The delete tab handles restore as well
+    setRecordIdToDelete(id);
+    setActiveTab("delete");
   };
 
   const clearRecordIdToUpdate = () => setRecordIdToUpdate(null);
   const clearRecordIdToDelete = () => setRecordIdToDelete(null);
 
   const handleRecordCreated = () => {
-    // Optionally switch to query tab or clear form etc.
     setActiveTab("query");
   }
 
@@ -53,13 +52,13 @@ export default function PixelDBExplorerPage() {
 
   return (
     <div className="min-h-screen container mx-auto p-4 md:p-8 font-body">
-      <Card className="bg-card/50 pixel-border shadow-pixel-primary mb-8">
+      <Card className="bg-card/80 pixel-border shadow-pixel-primary mb-8 backdrop-blur-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-4xl md:text-5xl font-headline text-primary tracking-wider">
-            PixelDB Explorer
+            Asistente IA de Consultas
           </CardTitle>
           <CardDescription className="text-muted-foreground text-lg">
-            Manage your retro database with style!
+            Consulta tus datos y obtén traducciones con IA.
           </CardDescription>
         </CardHeader>
       </Card>
@@ -67,16 +66,16 @@ export default function PixelDBExplorerPage() {
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as TabValue)} className="w-full">
         <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-1 p-1 bg-muted/30 h-auto pixel-border">
           <TabsTrigger value="query" className="py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-pixel-primary pixel-border border-transparent hover:bg-primary/20 transition-all duration-150">
-            <PixelSearchIcon className="w-5 h-5 mr-2" /> Query
+            <PixelSearchIcon className="w-5 h-5 mr-2" /> Consultar
           </TabsTrigger>
           <TabsTrigger value="create" className="py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-pixel-primary pixel-border border-transparent hover:bg-primary/20 transition-all duration-150">
-            <PixelPlusIcon className="w-5 h-5 mr-2" /> Create
+            <PixelPlusIcon className="w-5 h-5 mr-2" /> Crear
           </TabsTrigger>
           <TabsTrigger value="update" className="py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-pixel-primary pixel-border border-transparent hover:bg-primary/20 transition-all duration-150">
-            <PixelEditIcon className="w-5 h-5 mr-2" /> Update
+            <PixelEditIcon className="w-5 h-5 mr-2" /> Actualizar
           </TabsTrigger>
           <TabsTrigger value="delete" className="py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-pixel-primary pixel-border border-transparent hover:bg-primary/20 transition-all duration-150">
-            <PixelTrashIcon className="w-5 h-5 mr-2" /> Delete/Restore
+            <PixelTrashIcon className="w-5 h-5 mr-2" /> Eliminar/Restaurar
           </TabsTrigger>
         </TabsList>
 
