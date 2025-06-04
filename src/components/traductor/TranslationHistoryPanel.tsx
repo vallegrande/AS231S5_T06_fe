@@ -9,7 +9,7 @@ import { ClientTimestamp } from "@/components/common/ClientTimestamp";
 import type { BackendTranslationRecord } from "@/types/backend";
 
 interface TranslationHistoryPanelProps {
-  history: BackendTranslationRecord[];
+  history: BackendTranslationRecord[] | undefined | null; // Allow undefined/null for robustness
   onClearHistory: () => void;
   onSoftDeleteTranslationRecord: (id: string) => void;
   onRestoreTranslationRecord: (id: string) => void;
@@ -19,7 +19,7 @@ interface TranslationHistoryPanelProps {
 }
 
 export function TranslationHistoryPanel({
-  history = [], // Ensure history is always an array
+  history, // Removed default here, will handle inside
   onClearHistory,
   onSoftDeleteTranslationRecord,
   onRestoreTranslationRecord,
@@ -28,17 +28,19 @@ export function TranslationHistoryPanel({
   isClearingHistory = false,
 }: TranslationHistoryPanelProps) {
 
-  const sortedHistory = [...history].sort((a, b) => {
+  // Ensure history is an array before performing array operations
+  const safeHistory: BackendTranslationRecord[] = Array.isArray(history) ? history : [];
+
+  const sortedHistory = [...safeHistory].sort((a, b) => {
      if (a.deleted === b.deleted) {
-      // Ensure createdAt exists before trying to parse it
-      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      const dateA = a?.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b?.createdAt ? new Date(b.createdAt).getTime() : 0;
       return dateB - dateA;
     }
-    return a.deleted ? 1 : -1; // Non-deleted items first
+    return a.deleted ? 1 : -1;
   });
 
-  const activeItemsCount = history.filter(r => r && !r.deleted).length;
+  const activeItemsCount = safeHistory.filter(r => r && !r.deleted).length;
 
   return (
     <div className={cn("w-full md:w-96 flex-shrink-0 pixel-card flex flex-col h-full", className)} style={style}>
@@ -67,7 +69,7 @@ export function TranslationHistoryPanel({
             <p className="text-sm text-muted-foreground text-center py-4 font-code">No hay traducciones recientes.</p>
           )}
           {sortedHistory
-            .filter(record => record && record.id) // Filter out records with no id
+            .filter(record => record && record.id) 
             .map((record) => (
             <div
               key={record.id}
@@ -112,7 +114,7 @@ export function TranslationHistoryPanel({
                   <strong className="text-muted-foreground">Original:</strong> {(record.sourceText || '').substring(0, 70)}{(record.sourceText || '').length > 70 ? "..." : ""}
                 </p>
                 <p className="text-primary break-words">
-                  <strong className="text-muted-foreground">Traducción:</strong> {(record.translatedText || '').substring(0, 70)}{(record.translatedText || '').length > 70 ? "..." : ""}
+                  <strong className="text-muted-foreground">Traducción:</strong> {(record.translatedText || '').length > 70 ? "..." : ""}
                 </p>
               </div>
             </div>
