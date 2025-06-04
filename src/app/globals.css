@@ -86,12 +86,22 @@ body {
     z-index: 0;
     background-color: hsl(var(--muted)); 
     background-image:
+      /* New "stars" layer: 1px radius dots (effectively 2x2px), repeating every 16px, offset by 8px */
+      radial-gradient(hsl(var(--accent)) 1px, transparent 1px),
+      /* Diamond grid pattern (original layers) */
       linear-gradient(45deg, hsl(var(--background)) 25%, transparent 25%),
       linear-gradient(-45deg, hsl(var(--background)) 25%, transparent 25%),
       linear-gradient(45deg, transparent 75%, hsl(var(--background)) 75%),
       linear-gradient(-45deg, transparent 75%, hsl(var(--background)) 75%);
-    background-size: 32px 32px; 
-    background-position: 0 0, 0 16px, 16px -16px, -16px 0px;
+    background-size:
+      16px 16px, /* Repeating cell size for stars layer */
+      32px 32px, /* Size for the diamond grid (original four layers) */
+      32px 32px,
+      32px 32px,
+      32px 32px;
+    background-position:
+      8px 8px, /* Offset for stars pattern */
+      0 0, 0 16px, 16px -16px, -16px 0px; /* Diamond grid positions (original) */
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-crisp-edges;
@@ -102,49 +112,34 @@ body {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 256px; /* Double the previous 128px */
-    height: 320px; /* Double the previous 160px */
-    background-color: transparent; /* Ensure no base color interferes */
+    width: 256px; 
+    height: 320px; 
+    background-color: transparent; 
 
-    /* BMO Colors */
     --bmo-body: hsl(175, 55%, 50%);
-    --bmo-body-dark: hsl(175, 55%, 35%); /* For outline/bevel */
+    --bmo-body-dark: hsl(175, 55%, 35%); 
     --bmo-screen: hsl(0, 0%, 10%);
     --bmo-button-red: hsl(0, 70%, 50%);
     --bmo-button-yellow: hsl(50, 100%, 60%);
     --bmo-button-blue: hsl(210, 70%, 50%);
-    --bmo-button-green: hsl(120, 60%, 45%); /* Small green button */
+    --bmo-button-green: hsl(120, 60%, 45%); 
 
     background-image:
-      /* Top layer: Small Green LED-like button */
       radial-gradient(circle at 85% 15%, var(--bmo-button-green) 4px, transparent 4.5px),
-
-      /* Red Button (Circle) */
       radial-gradient(circle at 78% 68%, var(--bmo-button-red) 18px, transparent 18.5px),
-      /* Yellow Button (Circle) */
       radial-gradient(circle at 62% 78%, var(--bmo-button-yellow) 14px, transparent 14.5px),
-
-      /* D-Pad (Blue cross) */
-      /* Horizontal part of D-pad */
-      linear-gradient(var(--bmo-button-blue), var(--bmo-button-blue)) 20% 70% / 20% 6%, /* x-pos y-pos / width height */
-      /* Vertical part of D-pad */
-      linear-gradient(var(--bmo-button-blue), var(--bmo-button-blue)) 20% 70% / 6% 20%, /* x-pos y-pos / width height */
-
-      /* Screen (Black) */
-      linear-gradient(var(--bmo-screen), var(--bmo-screen)) 50% 38% / 70% 45%, /* x-pos y-pos / width height */
-
-      /* Main Body (Teal) - slightly inset to reveal the darker body as outline */
-      linear-gradient(var(--bmo-body), var(--bmo-body)) 50% 50% / calc(100% - 10px) calc(100% - 10px), /* x-pos y-pos / width height */
-
-      /* Base Body Outline (Darker Teal) - covers the whole area */
-      linear-gradient(var(--bmo-body-dark), var(--bmo-body-dark)) 50% 50% / 100% 100%; /* x-pos y-pos / width height */
+      linear-gradient(var(--bmo-button-blue), var(--bmo-button-blue)) 20% 70% / 20% 6%, 
+      linear-gradient(var(--bmo-button-blue), var(--bmo-button-blue)) 20% 70% / 6% 20%, 
+      linear-gradient(var(--bmo-screen), var(--bmo-screen)) 50% 38% / 70% 45%, 
+      linear-gradient(var(--bmo-body), var(--bmo-body)) 50% 50% / calc(100% - 10px) calc(100% - 10px), 
+      linear-gradient(var(--bmo-body-dark), var(--bmo-body-dark)) 50% 50% / 100% 100%; 
 
     background-repeat: no-repeat;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-crisp-edges;
-    z-index: -1; /* Behind content */
-    pointer-events: none; /* Not interactive */
+    z-index: -1; 
+    pointer-events: none; 
   }
 
   input, button, textarea, select {
