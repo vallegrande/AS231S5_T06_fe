@@ -40,7 +40,18 @@ async function fetchWithErrorHandling<T>(url: string, options?: RequestInit): Pr
     }
     // For text/plain responses (like your Gemini generate and translate endpoints)
     if (contentType?.includes("text/plain") || contentType?.includes("text/html") || !contentType) { // Also handle cases with missing or generic content types
-        return response.text() as unknown as Promise<T>;
+        const textResponse = await response.text();
+        // For Gemini generate, which returns plain text, and translateText
+        if (url.includes("/api/gemini/generate") || url.includes("/api/translation/translate")) {
+          return textResponse as unknown as Promise<T>;
+        }
+        // Attempt to parse as JSON if it's not explicitly text for generate/translate
+        try {
+          return JSON.parse(textResponse) as Promise<T>;
+        } catch (e) {
+          console.warn(`Response from ${url} was text/plain but not for generate/translate and not valid JSON. Returning as plain text. Error:`, e);
+          return textResponse as unknown as Promise<T>;
+        }
     }
     
     console.warn(`Unexpected content type: ${contentType} from ${url}. Attempting to read as text.`);
@@ -48,10 +59,10 @@ async function fetchWithErrorHandling<T>(url: string, options?: RequestInit): Pr
 
   } catch (error: any) {
     let detailedErrorMessage = `Failed to fetch from ${url}.`;
-    if (error instanceof TypeError && error.message === "Failed to fetch") { // Specifically for this common error
+    if (error instanceof TypeError && error.message.toLowerCase().includes("failed to fetch")) { 
         detailedErrorMessage += ` This usually means the backend server at ${BASE_URL} is not reachable or a CORS policy is blocking the request.`;
         detailedErrorMessage += `\n\nTroubleshooting steps:`;
-        detailedErrorMessage += `\n1. Verify your backend server (and ngrok, if used) is running correctly.`;
+        detailedErrorMessage += `\n1. Verify your backend server (and ngrok, if used) is running correctly. Target URL: ${BASE_URL}`;
         detailedErrorMessage += `\n2. Check the backend server's console for any errors.`;
         detailedErrorMessage += `\n3. Ensure the URL '${BASE_URL}' in your .env file is correct and accessible from your browser/environment.`;
         detailedErrorMessage += `\n4. MOST IMPORTANTLY: Check your browser's Network Tab for this failed request. Look for 'CORS error' messages or if the request status is 'failed'.`;
@@ -69,7 +80,10 @@ async function fetchWithErrorHandling<T>(url: string, options?: RequestInit): Pr
     }
     console.error("---------------------------------------------------------------------");
     
-    alert(`Frontend Error: ${detailedErrorMessage}\n\nPlease check your browser's developer console (Network and Console tabs) for more details. The most common causes are the backend server not running, the ngrok URL being incorrect/expired, or a CORS misconfiguration on the backend.`);
+    // Only show alert in client-side environments
+    if (typeof window !== 'undefined') {
+        alert(`Frontend Error: ${detailedErrorMessage}\n\nPlease check your browser's developer console (Network and Console tabs) for more details. The most common causes are the backend server not running, the ngrok URL being incorrect/expired, or a CORS misconfiguration on the backend.`);
+    }
     throw new Error(detailedErrorMessage, { cause: error });
   }
 }
