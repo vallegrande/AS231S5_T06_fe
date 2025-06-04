@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,155 +9,135 @@ body {
 
 @layer base {
   :root {
-    /* Paleta Pixel Art Vibrante */
-    --background: 220 15% 95%; /* Fondo principal claro, ligeramente azulado */
-    --foreground: 220 25% 10%; /* Texto principal oscuro */
-
-    --card: 0 0% 100%; /* Fondo de los paneles/cards - blanco */
-    --card-foreground: var(--foreground);
-
-    --popover: var(--card);
-    --popover-foreground: var(--card-foreground);
-
-    --primary: 240 70% 60%; /* Azul vibrante como primario */
-    --primary-foreground: 0 0% 100%; /* Texto blanco para botones primarios */
-
-    --secondary: 50 80% 60%; /* Amarillo/Naranja como secundario */
-    --secondary-foreground: 220 25% 10%;
-
-    --muted: 220 15% 88%; 
-    --muted-foreground: 220 10% 45%;
-
-    --accent: 160 70% 50%; /* Verde azulado como acento */
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 80% 55%; /* Rojo vibrante para destructivo */
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 220 15% 70%; 
-    --input: 0 0% 100%; /* Fondo de inputs blanco */
-    --input-border: 220 15% 80%;
-    --ring: var(--primary); 
-
-    --radius: 0rem; /* Esquinas rectas para estilo pixel */
-
+    --background: 220 15% 95%; /* Lighter Gray */
+    --foreground: 220 25% 10%; /* Dark Blue-Gray */
+    --card: 0 0% 100%; /* White */
+    --card-foreground: 220 25% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 10%;
+    --primary: 330 85% 55%; /* Vibrant Pink/Magenta */
+    --primary-foreground: 0 0% 100%; /* White */
+    --primary-shadow-color: 330 85% 40%; /* Darker shade for shadow */
+    --secondary: 190 80% 50%; /* Bright Cyan/Teal */
+    --secondary-foreground: 220 25% 10%; /* Dark Blue-Gray for contrast */
+    --muted: 220 15% 88%; /* Light Gray */
+    --muted-foreground: 220 10% 45%; /* Medium Gray */
+    --accent: 50 90% 55%; /* Bright Yellow/Gold */
+    --accent-foreground: 240 25% 10%; /* Dark Blue for contrast */
+    --accent-shadow-color: 50 90% 40%; /* Darker shade for shadow */
+    --destructive: 0 80% 55%; /* Bright Red */
+    --destructive-foreground: 0 0% 100%; /* White */
+    --border: 220 15% 70%; /* Mid Gray */
+    --input: 0 0% 100%; /* White */
+    --input-border: 220 15% 80%; /* Light-Mid Gray */
+    --ring: 330 85% 55%; /* Primary color for rings */
+    --radius: 0rem; /* Square corners */
     --chart-1: var(--primary);
     --chart-2: var(--accent);
-    --chart-3: 36 90% 55%; /* Naranja */
-    --chart-4: 300 76% 60%; /* Magenta */
-    --chart-5: 0 63% 50%; /* Rojo oscuro */
-
-    /* Variables específicas de la app anterior que se pueden reutilizar o adaptar */
+    --chart-3: 36 90% 55%; /* Orange */
+    --chart-4: 300 76% 60%; /* Purple */
+    --chart-5: 0 63% 50%; /* Red */
     --app-bg: var(--background);
     --panel-bg: var(--card);
     --panel-border: var(--border);
-    
-    --header-bg: var(--primary); 
+    --header-bg: var(--primary);
     --header-fg: var(--primary-foreground);
-
     --text-primary: var(--foreground);
     --text-secondary: var(--muted-foreground);
     --text-on-primary-button: var(--primary-foreground);
     --text-on-destructive-button: var(--destructive-foreground);
-
     --button-primary-bg: var(--primary);
     --button-destructive-bg: var(--destructive);
+    --pixel-art-character-bg: url('https://placehold.co/64x64.png');
   }
 
   .dark {
-    /* Mantener tema claro por ahora, se puede definir un tema oscuro después si es necesario */
-    --background: 220 25% 10%; 
-    --foreground: 220 15% 95%; 
-
-    --card: 220 20% 15%; 
-    --card-foreground: var(--foreground);
-
-    --popover: var(--card);
-    --popover-foreground: var(--card-foreground);
-
-    --primary: 240 60% 65%; 
-    --primary-foreground: 220 15% 5%; 
-
-    --secondary: 50 70% 65%; 
-    --secondary-foreground: 220 15% 5%;
-
-    --muted: 220 15% 20%; 
-    --muted-foreground: 220 10% 55%;
-
-    --accent: 160 60% 55%; 
-    --accent-foreground: 220 15% 5%;
-
-    --destructive: 0 70% 60%; 
-    --destructive-foreground: 220 15% 5%;
-
-    --border: 220 15% 30%; 
-    --input: 220 20% 20%; 
-    --input-border: 220 15% 25%;
-    --ring: var(--primary);
-
-    /* Variables específicas de la app anterior que se pueden reutilizar o adaptar */
-    --app-bg: var(--background);
-    --panel-bg: var(--card);
-    --panel-border: var(--border);
-    
-    --header-bg: var(--primary); 
-    --header-fg: var(--primary-foreground);
-
-    --text-primary: var(--foreground);
-    --text-secondary: var(--muted-foreground);
-    --text-on-primary-button: var(--primary-foreground);
-    --text-on-destructive-button: var(--destructive-foreground);
-
-    --button-primary-bg: var(--primary);
-    --button-destructive-bg: var(--destructive);
+    --background: 230 20% 12%; /* Dark Blue-Black */
+    --foreground: 210 15% 90%; /* Off-White */
+    --card: 230 20% 18%; /* Darker Blue-Gray */
+    --card-foreground: 210 15% 90%;
+    --popover: 230 20% 18%;
+    --popover-foreground: 210 15% 90%;
+    --primary: 330 75% 60%; /* Vibrant Pink/Magenta - Dark */
+    --primary-foreground: 230 15% 10%; /* Very Dark Gray for contrast */
+    --primary-shadow-color: 330 75% 45%;
+    --secondary: 190 70% 55%; /* Bright Cyan/Teal - Dark */
+    --secondary-foreground: 210 15% 90%; /* Off-White */
+    --muted: 220 15% 25%; /* Dark Gray */
+    --muted-foreground: 220 10% 60%; /* Light Gray */
+    --accent: 50 80% 60%; /* Bright Yellow/Gold - Dark */
+    --accent-foreground: 50 25% 10%; /* Very Dark Brown for contrast */
+    --accent-shadow-color: 50 80% 45%;
+    --destructive: 0 70% 60%; /* Bright Red - Dark */
+    --destructive-foreground: 0 15% 5%; /* Almost Black */
+    --border: 220 15% 35%; /* Dark-Mid Gray */
+    --input: 220 20% 22%; /* Darker Gray */
+    --input-border: 220 15% 30%; /* Dark Gray */
+    --ring: 330 75% 60%; /* Primary color for rings - Dark */
   }
 }
 
 @layer base {
   * {
-    @apply border-border rounded-none; 
+    @apply border-border rounded-none;
   }
   body {
     @apply bg-background text-foreground;
+    background-image: var(--pixel-art-character-bg);
+    background-repeat: repeat;
+    background-size: 64px 64px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
   }
   input, button, textarea, select {
     font-family: inherit;
   }
 }
 
-/* Estilo para bordes tipo pixel art */
 .pixel-border {
   @apply border-2 border-foreground;
 }
 .pixel-border-primary {
-  @apply border-2 border-primary;
+  @apply border-2 border-[hsl(var(--primary-shadow-color))];
 }
 .pixel-border-accent {
-  @apply border-2 border-accent;
+  @apply border-2 border-[hsl(var(--accent-shadow-color))];
+}
+.pixel-shadow {
+  box-shadow: 3px 3px 0px hsl(var(--foreground) / 0.7);
+}
+.pixel-shadow-primary {
+  box-shadow: 3px 3px 0px hsl(var(--primary-shadow-color));
+}
+.pixel-shadow-accent {
+  box-shadow: 3px 3px 0px hsl(var(--accent-shadow-color));
+}
+.pixel-shadow-destructive {
+  box-shadow: 3px 3px 0px hsl(var(--destructive) / 0.7);
 }
 
-/* Estilos para scrollbar personalizados estilo pixel */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
 }
 ::-webkit-scrollbar-track {
   background: hsl(var(--muted));
-  border-left: 2px solid hsl(var(--foreground));
-  border-right: 2px solid hsl(var(--foreground));
+  border-left: 2px solid hsl(var(--foreground) / 0.5);
+  border-right: 2px solid hsl(var(--foreground) / 0.5);
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary)); 
-  border: 2px solid hsl(var(--foreground));
+  background: hsl(var(--primary));
+  border: 2px solid hsl(var(--foreground) / 0.7);
 }
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--accent));
 }
 ::-webkit-scrollbar-button {
-  background-color: hsl(var(--foreground));
+  background-color: hsl(var(--foreground) / 0.7);
   border: 2px solid hsl(var(--muted));
-  height: 10px;
-  width: 10px;
+  height: 12px;
+  width: 12px;
 }
 ::-webkit-scrollbar-button:start:decrement,
 ::-webkit-scrollbar-button:end:increment {
@@ -167,36 +148,84 @@ body {
   display: none;
 }
 
-
-/* Ajustes específicos para componentes ShadCN para que adopten el estilo pixel */
 .pixel-tabs-list {
-  @apply bg-muted p-1 border-2 border-foreground shadow-pixel-foreground;
+  @apply bg-muted p-1 pixel-border pixel-shadow;
 }
 
 .pixel-tabs-trigger {
-  @apply data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-pixel-primary-inset hover:bg-accent/20;
+  @apply hover:bg-accent/30;
+}
+.pixel-tabs-trigger:hover:not([data-state="active"]) {
+   box-shadow: 2px 2px 0px hsl(var(--accent-shadow-color));
 }
 
+.pixel-tabs-trigger[data-state="active"] {
+  @apply bg-primary text-primary-foreground shadow-[2px_2px_0px_hsl(var(--primary-shadow-color))];
+  animation: pixel-pulse 0.7s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+
 .pixel-card {
-  @apply bg-card border-2 border-foreground shadow-pixel-foreground;
+  @apply bg-card pixel-border pixel-shadow;
 }
 
 .pixel-input {
-  @apply bg-input border-2 border-input-border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground;
+  @apply bg-input pixel-border focus:border-[hsl(var(--primary-shadow-color))] focus:ring-2 focus:ring-primary/50 text-foreground;
+  box-shadow: inset 1px 1px 0px hsl(var(--foreground) / 0.3);
 }
 .pixel-textarea {
-   @apply bg-input border-2 border-input-border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground;
+   @apply bg-input pixel-border focus:border-[hsl(var(--primary-shadow-color))] focus:ring-2 focus:ring-primary/50 text-foreground;
+   box-shadow: inset 1px 1px 0px hsl(var(--foreground) / 0.3);
 }
 
 .pixel-button {
-  @apply border-2 border-foreground shadow-pixel-foreground active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-75;
+  @apply pixel-border pixel-shadow active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-75 hover:animate-pixel-jump;
 }
 .pixel-button-primary {
-   @apply bg-primary text-primary-foreground border-2 border-primary-foreground shadow-pixel-primary active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-75;
+   @apply bg-primary text-primary-foreground pixel-border-primary pixel-shadow-primary active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-75 hover:animate-pixel-jump;
 }
 .pixel-button-destructive {
-   @apply bg-destructive text-destructive-foreground border-2 border-destructive-foreground shadow-[3px_3px_0px_hsl(var(--foreground))] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-75;
+   @apply bg-destructive text-destructive-foreground border-2 border-[hsl(var(--destructive)/0.7)] pixel-shadow-destructive active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-75 hover:animate-pixel-jump;
 }
 .pixel-button-ghost {
-  @apply border-2 border-transparent hover:bg-accent/20 hover:border-accent active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all duration-75;
+  @apply border-2 border-transparent hover:bg-accent/20 hover:pixel-border-accent active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all duration-75 hover:pixel-shadow-accent hover:animate-pixel-jump;
 }
+
+.animate-text-pop-in {
+  animation: text-pop-in 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes text-pop-in {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pixel-jump {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes pixel-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.03); opacity: .85; }
+}
+@keyframes slide-in-up {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+    
