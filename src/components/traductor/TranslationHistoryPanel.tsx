@@ -18,24 +18,27 @@ interface TranslationHistoryPanelProps {
   isClearingHistory?: boolean;
 }
 
-export function TranslationHistoryPanel({ 
-  history, 
+export function TranslationHistoryPanel({
+  history = [], // Ensure history is always an array
   onClearHistory,
   onSoftDeleteTranslationRecord,
   onRestoreTranslationRecord,
-  className, 
+  className,
   style,
   isClearingHistory = false,
 }: TranslationHistoryPanelProps) {
 
   const sortedHistory = [...history].sort((a, b) => {
      if (a.deleted === b.deleted) {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      // Ensure createdAt exists before trying to parse it
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return dateB - dateA;
     }
     return a.deleted ? 1 : -1; // Non-deleted items first
   });
 
-  const activeItemsCount = history.filter(r => !r.deleted).length;
+  const activeItemsCount = history.filter(r => r && !r.deleted).length;
 
   return (
     <div className={cn("w-full md:w-96 flex-shrink-0 pixel-card flex flex-col h-full", className)} style={style}>
@@ -45,10 +48,10 @@ export function TranslationHistoryPanel({
           <h2 className="text-xl font-headline text-primary">Historial</h2>
         </div>
         {activeItemsCount > 0 && (
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={onClearHistory} 
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClearHistory}
             className="pixel-button-ghost text-destructive hover:bg-destructive/20 hover:text-destructive-foreground hover:border-destructive-foreground p-1.5"
             title="Limpiar Historial (elementos activos)"
             disabled={isClearingHistory}
@@ -66,8 +69,8 @@ export function TranslationHistoryPanel({
           {sortedHistory
             .filter(record => record && record.id) // Filter out records with no id
             .map((record) => (
-            <div 
-              key={record.id} 
+            <div
+              key={record.id}
               className={cn(
                 "p-2.5 pixel-border bg-background/50 text-xs font-code shadow-pixel-foreground/30 animate-fade-in",
                 record.deleted && "opacity-60"
