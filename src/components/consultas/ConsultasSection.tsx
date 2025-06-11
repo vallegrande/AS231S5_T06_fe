@@ -39,6 +39,10 @@ export function ConsultasSection() {
   });
 
   useEffect(() => {
+    console.log('ConsultasSection: queryHistory updated', queryHistory);
+  }, [queryHistory]);
+
+  useEffect(() => {
     if (historyError) {
       toast({ title: "Error al Cargar Historial de Consultas", description: historyError.message, variant: "destructive"});
     }
