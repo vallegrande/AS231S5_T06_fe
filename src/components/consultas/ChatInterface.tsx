@@ -5,14 +5,13 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, User, Bot } from "lucide-react";
+import { Loader2, Send, User, Bot, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { cn } from "@/lib/utils";
 import { ClientTimestamp } from "@/components/common/ClientTimestamp";
 import { generateGeminiContent } from "@/lib/backend-api-client";
-import type { GeminiApiTest } from "@/types/backend";
 
 export interface DisplayChatEntry {
   id: string;
@@ -22,24 +21,25 @@ export interface DisplayChatEntry {
 }
 
 interface ChatInterfaceProps {
-  onQuerySubmittedAndResponded: () => void; // Callback to notify parent to refetch history
-  loadQueryText: string | null; // Changed from ChatEntry to just the text
+  onQuerySubmittedAndResponded: () => void;
+  loadQueryText: string | null; 
   clearLoadedQueryText: () => void;
 }
 
+const INITIAL_AI_MESSAGE: DisplayChatEntry = { 
+  id: "0", 
+  type: "ai", 
+  text: "¡Hola! Soy Gemini, tu asistente virtual pixelado. ¿En qué puedo ayudarte hoy?", 
+  timestamp: new Date() 
+};
+
 export function ChatInterface({ onQuerySubmittedAndResponded, loadQueryText, clearLoadedQueryText }: ChatInterfaceProps) {
   const [userInput, setUserInput] = useState("");
-  const [chatLog, setChatLog] = useState<DisplayChatEntry[]>([]);
+  const [chatLog, setChatLog] = useState<DisplayChatEntry[]>([INITIAL_AI_MESSAGE]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    setChatLog([
-      { id: "0", type: "ai", text: "¡Hola! Soy Gemini, tu asistente virtual pixelado. ¿En qué puedo ayudarte hoy?", timestamp: new Date() }
-    ]);
-  }, []);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -69,7 +69,7 @@ export function ChatInterface({ onQuerySubmittedAndResponded, loadQueryText, cle
       const resultText = await generateGeminiContent(currentInput);
       const aiMessage: DisplayChatEntry = { id: (Date.now()+1).toString(), type: "ai", text: resultText, timestamp: new Date() };
       setChatLog(prevLog => [...prevLog, aiMessage]);
-      onQuerySubmittedAndResponded(); // Notify parent to refetch history from backend
+      onQuerySubmittedAndResponded();
     } catch (error) {
       console.error("Error en chat con Gemini (backend):", error);
       const errorMessage: DisplayChatEntry = {id: (Date.now()+1).toString(), type: "ai", text: "Lo siento, ocurrió un error al procesar tu solicitud pixelada.", timestamp: new Date() };
@@ -83,6 +83,13 @@ export function ChatInterface({ onQuerySubmittedAndResponded, loadQueryText, cle
       setIsLoading(false);
       textAreaRef.current?.focus();
     }
+  };
+
+  const handleRefreshChat = () => {
+    setChatLog([{...INITIAL_AI_MESSAGE, timestamp: new Date()}]); // Use new timestamp for refresh
+    setUserInput("");
+    textAreaRef.current?.focus();
+    toast({ title: "Chat Reiniciado", description: "Puedes iniciar una nueva conversación." });
   };
 
   return (
@@ -120,6 +127,17 @@ export function ChatInterface({ onQuerySubmittedAndResponded, loadQueryText, cle
         )}
       </ScrollArea>
       <form onSubmit={handleSubmit} className="p-3 border-t-2 border-foreground flex items-center gap-2 bg-muted">
+        <Button 
+          type="button" 
+          variant="ghost" 
+          size="icon" 
+          onClick={handleRefreshChat} 
+          className="h-9 w-9 p-0 pixel-button-ghost border-accent text-accent hover:bg-accent/30 hover:border-accent-shadow-color"
+          title="Reiniciar Chat"
+        >
+          <RefreshCw className="w-5 h-5" />
+          <span className="sr-only">Reiniciar Chat</span>
+        </Button>
         <Textarea
           ref={textAreaRef}
           placeholder="Escribe tu consulta aquí..."
@@ -142,3 +160,4 @@ export function ChatInterface({ onQuerySubmittedAndResponded, loadQueryText, cle
     </div>
   );
 }
+

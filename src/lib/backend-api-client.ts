@@ -7,9 +7,12 @@ import type {
 } from '@/types/backend';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:8080';
+console.log(`[API Client] Initial BASE_URL: ${BASE_URL}`);
+
 
 async function fetchWithErrorHandling<T>(url: string, options?: RequestInit): Promise<T> {
-  console.log(`[API Client] Using BASE_URL: ${BASE_URL}`);
+  // This log helps confirm the BASE_URL at the time of a call
+  console.log(`[API Client] Using BASE_URL for this call: ${BASE_URL}`);
   const fullUrl = url.startsWith('http') ? url : `${BASE_URL}${url}`;
   console.log(`[API Client] Attempting to fetch: ${fullUrl}`, options ? `with options: ${JSON.stringify(options.method)}` : '');
 
@@ -32,6 +35,11 @@ async function fetchWithErrorHandling<T>(url: string, options?: RequestInit): Pr
         console.warn(`[API Client] Could not parse error response from ${fullUrl} as JSON, or error in parsing. Status: ${response.status}. Error:`, e);
       }
       throw new Error(errorMessage);
+    }
+    
+    // Handle cases where the response might be empty (e.g., 204 No Content for DELETE)
+    if (response.status === 204) {
+      return null as unknown as Promise<T>; // Or appropriate response for a 204
     }
 
     const contentType = response.headers.get("content-type");
@@ -88,7 +96,8 @@ async function fetchWithErrorHandling<T>(url: string, options?: RequestInit): Pr
     console.error("---------------------------------------------------------------------");
     
     if (typeof window !== 'undefined') {
-        alert(`Frontend Error: ${detailedErrorMessage}\n\nPlease check your browser's developer console (Network and Console tabs) for more details. The most common causes are the backend server not running, the ngrok URL being incorrect/expired, or a CORS misconfiguration on the backend.`);
+      // Removed alert as it can be annoying during development. Errors are logged to console.
+      // alert(`Frontend Error: ${detailedErrorMessage}\n\nPlease check your browser's developer console (Network and Console tabs) for more details. The most common causes are the backend server not running, the ngrok URL being incorrect/expired, or a CORS misconfiguration on the backend.`);
     }
     throw new Error(detailedErrorMessage, { cause: error });
   }
@@ -105,18 +114,24 @@ export async function generateGeminiContent(prompt: string): Promise<string> {
 }
 
 export async function getGeminiHistory(): Promise<GeminiApiTest[]> {
-  return fetchWithErrorHandling<GeminiApiTest[]>(`/api/gemini/history`);
+  return fetchWithErrorHandling<GeminiApiTest[]>(`/api/gemini/history/all`);
 }
 
 export async function softDeleteGeminiHistoryItem(id: string): Promise<GeminiApiTest> {
-  return fetchWithErrorHandling<GeminiApiTest>(`/api/gemini/history/logical/${id}`, {
+  return fetchWithErrorHandling<GeminiApiTest>(`/api/gemini/history/${id}`, {
     method: 'DELETE',
   });
 }
 
 export async function restoreGeminiHistoryItem(id: string): Promise<GeminiApiTest> {
-  return fetchWithErrorHandling<GeminiApiTest>(`/api/gemini/history/restore/${id}`, {
+  return fetchWithErrorHandling<GeminiApiTest>(`/api/gemini/history/${id}/restore`, {
     method: 'POST',
+  });
+}
+
+export async function permanentlyDeleteGeminiHistoryItem(id: string): Promise<void> {
+  return fetchWithErrorHandling<void>(`/api/gemini/history/permanent/${id}`, {
+    method: 'DELETE',
   });
 }
 
