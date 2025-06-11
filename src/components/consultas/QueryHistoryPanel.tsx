@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { ClientTimestamp } from "../common/ClientTimestamp";
 
 interface QueryHistoryPanelProps {
-  history: GeminiApiTest[];
+  history: GeminiApiTest[] | undefined | null; // Allow undefined/null for robustness
   onLoadQuery: (item: GeminiApiTest) => void;
   onSoftDeleteQueryItem: (id: string) => void;
   onRestoreQueryItem: (id: string) => void;
@@ -28,10 +28,10 @@ export function QueryHistoryPanel({
   style 
 }: QueryHistoryPanelProps) {
   
-  // Temporary log to diagnose history display issues
-  console.log('QueryHistoryPanel received history:', history);
-
+  // Ensure history is an array before performing array operations
   const safeHistory: GeminiApiTest[] = Array.isArray(history) ? history : [];
+  console.log('QueryHistoryPanel received history:', safeHistory);
+
 
   const sortedHistory = [...safeHistory].sort((a, b) => {
     if (a.deleted === b.deleted) {
@@ -82,20 +82,20 @@ export function QueryHistoryPanel({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 p-1 text-blue-600 hover:bg-blue-500/20 hover:text-blue-700"
+                      className="h-7 w-7 p-1.5 text-blue-600 hover:bg-blue-500/20 hover:text-blue-700"
                       onClick={() => onLoadQuery(item)}
                       title="Editar consulta (cargar en chat)"
                     >
-                      <FilePenLine className="w-3.5 h-3.5" />
+                      <FilePenLine className="w-4 h-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 p-1 text-orange-600 hover:bg-orange-500/20 hover:text-orange-700"
+                      className="h-7 w-7 p-1.5 text-orange-600 hover:bg-orange-500/20 hover:text-orange-700"
                       onClick={() => onSoftDeleteQueryItem(item.id)}
                       title="Eliminar consulta (lógicamente)"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
                 )}
@@ -108,20 +108,20 @@ export function QueryHistoryPanel({
                      <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 p-1 text-green-600 hover:bg-green-500/20 hover:text-green-700"
+                      className="h-7 w-7 p-1.5 text-green-600 hover:bg-green-500/20 hover:text-green-700"
                       onClick={() => onRestoreQueryItem(item.id)}
                       title="Restaurar consulta"
                     >
-                      <RotateCcw className="w-3.5 h-3.5" />
+                      <RotateCcw className="w-4 h-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 p-1 text-red-700 hover:bg-red-500/20 hover:text-red-800"
+                      className="h-7 w-7 p-1.5 text-red-700 hover:bg-red-500/20 hover:text-red-800"
                       onClick={() => onPermanentDeleteQueryItem(item.id)}
                       title="Eliminar permanentemente"
                     >
-                      <Trash className="w-3.5 h-3.5" />
+                      <Trash className="w-4 h-4" />
                     </Button>
                   </div>
                 )}
