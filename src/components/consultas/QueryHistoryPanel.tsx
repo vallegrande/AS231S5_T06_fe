@@ -41,7 +41,7 @@ export function QueryHistoryPanel({
   });
 
   return (
-    <div className={cn("w-full md:w-96 flex-shrink-0 pixel-card flex flex-col h-full", className)} style={style}>
+    <div className={cn("w-full md:w-2/5 flex-shrink-0 pixel-card flex flex-col h-full", className)} style={style}>
       <header className="p-3 border-b-2 border-foreground bg-card flex items-center">
         <History className="w-6 h-6 mr-2 text-primary" />
         <h2 className="text-xl font-headline text-primary">Historial de Consultas</h2>
@@ -68,11 +68,12 @@ export function QueryHistoryPanel({
                     "flex-grow justify-start text-left h-auto py-1 px-1 flex flex-col items-start text-sm",
                     item.deleted && "line-through"
                   )}
-                  onClick={() => onLoadQuery(item)}
-                  title={`Cargar consulta: ${(item.prompt || '').substring(0,50)}...`}
+                  onClick={() => !item.deleted && onLoadQuery(item)} // Only allow load if not deleted
+                  disabled={item.deleted} // Disable button if deleted
+                  title={item.deleted ? `Consulta eliminada: ${(item.prompt || '').substring(0,50)}...` :`Cargar consulta: ${(item.prompt || '').substring(0,50)}...`}
                 >
                   <div className="flex items-center w-full">
-                      <MessageSquareDashed className="w-4 h-4 mr-2 flex-shrink-0" />
+                      <MessageSquareDashed className="w-5 h-5 mr-2 flex-shrink-0" />
                       <span className="truncate font-code">{item.prompt || "Sin prompt"}</span>
                   </div>
                 </Button>
@@ -82,46 +83,46 @@ export function QueryHistoryPanel({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-7 w-7 p-1.5 text-blue-600 hover:bg-blue-500/20 hover:text-blue-700"
+                      className="h-8 w-8 p-1.5 text-blue-600 hover:bg-blue-500/20 hover:text-blue-700"
                       onClick={() => onLoadQuery(item)}
                       title="Editar consulta (cargar en chat)"
                     >
-                      <FilePenLine className="w-4 h-4" />
+                      <FilePenLine className="w-5 h-5" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-7 w-7 p-1.5 text-orange-600 hover:bg-orange-500/20 hover:text-orange-700"
+                      className="h-8 w-8 p-1.5 text-orange-600 hover:bg-orange-500/20 hover:text-orange-700"
                       onClick={() => onSoftDeleteQueryItem(item.id)}
                       title="Eliminar consulta (lógicamente)"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-5 h-5" />
                     </Button>
                   </div>
                 )}
               </div>
               <div className="flex justify-between items-center w-full mt-1 pl-1">
                 <ClientTimestamp date={new Date(item.timestamp)} className="text-xs text-muted-foreground/80 self-start" />
-                {/* Action buttons for logically deleted items */}
+                {/* Action buttons for logically deleted items - NOW ALWAYS VISIBLE */}
                 {item.deleted && (
-                  <div className="flex-shrink-0 ml-1 space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex-shrink-0 ml-1 space-x-1">
                      <Button
                       variant="ghost"
                       size="icon"
-                      className="h-7 w-7 p-1.5 text-green-600 hover:bg-green-500/20 hover:text-green-700"
+                      className="h-8 w-8 p-1.5 text-green-600 hover:bg-green-500/20 hover:text-green-700"
                       onClick={() => onRestoreQueryItem(item.id)}
                       title="Restaurar consulta"
                     >
-                      <RotateCcw className="w-4 h-4" />
+                      <RotateCcw className="w-5 h-5" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-7 w-7 p-1.5 text-red-700 hover:bg-red-500/20 hover:text-red-800"
+                      className="h-8 w-8 p-1.5 text-red-700 hover:bg-red-500/20 hover:text-red-800"
                       onClick={() => onPermanentDeleteQueryItem(item.id)}
                       title="Eliminar permanentemente"
                     >
-                      <Trash className="w-4 h-4" />
+                      <Trash className="w-5 h-5" />
                     </Button>
                   </div>
                 )}
