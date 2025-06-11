@@ -40,7 +40,7 @@ export function QueryHistoryPanel({
         <History className="w-6 h-6 mr-2 text-primary" />
         <h2 className="text-xl font-headline text-primary">Historial de Consultas</h2>
       </header>
-      <ScrollArea className="flex-grow">
+      <ScrollArea className="flex-grow min-h-[100px]">
         <div className="p-3 space-y-2">
           {sortedHistory.length === 0 && (
             <p className="text-sm text-muted-foreground text-center py-4 font-code">No hay consultas recientes.</p>

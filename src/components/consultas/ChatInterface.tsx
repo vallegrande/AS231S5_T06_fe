@@ -7,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2, Send, User, Bot } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { cn } from "@/lib/utils";
 import { ClientTimestamp } from "@/components/common/ClientTimestamp";
 import { generateGeminiContent } from "@/lib/backend-api-client";
@@ -98,7 +100,13 @@ export function ChatInterface({ onQuerySubmittedAndResponded, loadQueryText, cle
               <Bot className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" /> : 
               <User className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />}
             <div className="flex flex-col">
-              <p className="whitespace-pre-wrap font-code">{entry.text}</p>
+              {entry.type === 'ai' ? (
+                <ReactMarkdown remarkPlugins={[remarkGfm]} className="prose prose-sm dark:prose-invert max-w-none text-foreground">
+                  {entry.text}
+                </ReactMarkdown>
+              ) : (
+                <p className="whitespace-pre-wrap font-code">{entry.text}</p>
+              )}
               <ClientTimestamp date={entry.timestamp} className="text-xs text-muted-foreground self-end mt-1"/>
             </div>
           </div>

@@ -1,7 +1,8 @@
+
 import type {Config} from 'tailwindcss';
 
 export default {
-  darkMode: ['class'], 
+  darkMode: ['class'],
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -12,7 +13,7 @@ export default {
       fontFamily: {
         body: ['"Space Grotesk"', 'sans-serif'],
         headline: ['"VT323"', '"Space Grotesk"', 'sans-serif'], // Usar VT323 para títulos
-        code: ['"Space Grotesk"', 'monospace'], 
+        code: ['"Space Grotesk"', 'monospace'],
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -127,5 +128,8 @@ export default {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('@tailwindcss/typography')
+  ],
 } satisfies Config;
