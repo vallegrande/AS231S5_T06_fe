@@ -114,7 +114,8 @@ export async function generateGeminiContent(prompt: string): Promise<string> {
 }
 
 export async function getGeminiHistory(): Promise<GeminiApiTest[]> {
-  return fetchWithErrorHandling<GeminiApiTest[]>(`/api/gemini/history/all`);
+  // Updated to use /api/gemini/history as requested
+  return fetchWithErrorHandling<GeminiApiTest[]>(`/api/gemini/history`);
 }
 
 export async function softDeleteGeminiHistoryItem(id: string): Promise<GeminiApiTest> {
