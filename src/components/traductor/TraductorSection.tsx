@@ -95,7 +95,7 @@ export function TraductorSection() {
   
   return (
     <div className="flex flex-col md:flex-row gap-3 md:gap-4 h-full">
-      <div className="md:w-3/5 w-full flex flex-col pixel-card overflow-hidden animate-slide-in-up">
+      <div className="md:w-2/5 w-full flex flex-col pixel-card overflow-hidden animate-slide-in-up">
         <header className="p-3 border-b-2 border-foreground bg-card flex items-center">
           <Languages className="w-6 h-6 mr-2 text-primary" />
           <h2 className="text-xl font-headline text-primary">Traductor con IA</h2>
@@ -114,7 +114,7 @@ export function TraductorSection() {
       </div>
 
       {isLoadingHistory && !historyError &&
-        <div className="md:w-2/5 w-full flex items-center justify-center pixel-card p-4">
+        <div className="md:w-3/5 w-full flex items-center justify-center pixel-card p-4">
           <Loader2 className="w-8 h-8 animate-spin text-primary mr-2"/> 
           <span className="font-headline text-lg">Cargando Historial...</span>
         </div>
@@ -125,14 +125,14 @@ export function TraductorSection() {
           onClearHistory={handleClearHistory} 
           onSoftDeleteTranslationRecord={handleSoftDeleteTranslationRecord}
           onRestoreTranslationRecord={handleRestoreTranslationRecord}
-          className="md:w-2/5 w-full animate-slide-in-up md:animate-fade-in"
+          className="md:w-3/5 w-full animate-slide-in-up md:animate-fade-in"
           style={{ animationDelay: '0.1s' }}
           isClearingHistory={clearHistoryMutation.isPending}
         />
       }
       {/* Fallback for history error state for the panel width */}
       {historyError && !isLoadingHistory && (
-         <div className="md:w-2/5 w-full flex items-center justify-center pixel-card p-4 bg-destructive/10 border-destructive">
+         <div className="md:w-3/5 w-full flex items-center justify-center pixel-card p-4 bg-destructive/10 border-destructive">
           <span className="font-headline text-lg text-destructive">Error en Historial</span>
         </div>
       )}

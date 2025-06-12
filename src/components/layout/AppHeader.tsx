@@ -1,3 +1,4 @@
+
 "use client";
 
 export function AppHeader() {
@@ -32,7 +33,7 @@ export function AppHeader() {
         <rect x="3" y="7" width="2" height="1" fill="currentColor"/>
       </svg>
       <h1
-        className="text-3xl font-headline tracking-wider uppercase text-foreground"
+        className="text-2xl sm:text-3xl font-headline tracking-wider uppercase text-foreground"
         style={{ textShadow: '2px 2px 0px hsl(var(--foreground) / 0.5)' }}
       >
         Consultas & Traductor
